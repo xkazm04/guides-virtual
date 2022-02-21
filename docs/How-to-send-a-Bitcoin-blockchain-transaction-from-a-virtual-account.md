@@ -2,7 +2,7 @@
 
 ---
 
-When you work with Tatum Virtual Accounts, you can perform instant transactions between virtual accounts which are not written to the underlying blockchain. But every once in a while, you need to synchronize some of the transactions to the blockchain. In this case, you have to perform a virtual-account-to-blockchain transaction. As a prerequisite, you must have a virtual account with credited blockchain transactions available. 
+When you work with Tatum Virtual Accounts, you can perform instant transactions between virtual accounts which are not written to the underlying blockchain. But every once and a while, you need to synchronize some of the transactions to the blockchain. In this case, you have to perform a virtual account-to-blockchain transaction. As a prerequisite, you must have a virtual account with credited blockchain transactions available. 
 
 This type of transaction consists of 3 steps:
 - [Create a withdrawal transaction](../virtualAccounts/b3A6MjgwOTI1Njk-create-withdrawal) - this will perform a virtual account transaction from the source account. It will debit the amount from the source account.
@@ -14,13 +14,36 @@ All of these actions can be performed as [one API call](../virtualAccounts/b3A6M
 <!-- theme: warning -->
 > #### Security
 >
-> Blockchain transactions are signed using a private key via API, which is not a secure way of signing transactions. Your private keys and mnemonics should never leave your security perimeter. To correctly and securely sign a transaction, you can use [Tatum CLI](https://github.com/tatumio/tatum-cli); a specific language library like [Tatum JS](https://github.com/tatumio/tatum-js); the local [middleware API](https://github.com/tatumio/tatum-middleware); or our complex key management system, [Tatum KMS](https://github.com/tatumio/tatum-kms).
+> In this guide, blockchain transactions are being signed using a private key via API.
+> This is fine for testing and demo purposes, but for production use, it is not a secure way of signing transactions. 
+> **Your private keys and mnemonics should never leave your security perimeter**. To correctly and securely sign a transaction, you can use [Tatum CLI](https://github.com/tatumio/tatum-cli); a specific language library like [Tatum JS](https://github.com/tatumio/tatum-js); the local [middleware API](https://github.com/tatumio/tatum-middleware); or our complex key management system, [Tatum KMS](https://github.com/tatumio/tatum-kms).
 
 ---
 ## Sending Bitcoin from a virtual account to the blockchain
 
+
+This operation will [withdraw BTC from a virtual account to a blockchain address](https://tatum.io/apidoc.php#operation/BtcTransfer).
+
 **Request example**
-```json
+```JavaScript
+import {sendBitcoinOffchainTransaction} from '@tatumio/tatum';
+/**
+ * Send Bitcoin from Tatum account to address.
+ * This will create Tatum internal withdrawal request with ID.
+ * @param body - request body with data filter - https://tatum.io/apidoc.php#operation/BtcTransfer
+ * @param testnet - true if testnet, false if mainnet
+ */
+const body = {
+  senderAccountId: "5fbaca3001421166273b3779",
+  address: "mpTwPdF8up9kidgcAStriUPwRdnE9MRAg7",
+  amount: "0.00195",
+  fee: "0.00005",
+  mnemonic: "behave season capable ridge repair creek seat rescue potato divide fox expose wrestle asthma luggage rack afford pistol ridge modify direct picnic magic cannon",
+  xpub: "tpubDF1sYuDKCJr6mGietaVzqGmF2dqdKVBa1DtLJGBX8HXhtHZPv5UBz3WNWU22tiVAYSjqfvfFxMnDs3vM11iQrKej6dq33UCevhiPW9EQAS2"
+  }
+const tx = sendBitcoinOffchainTransaction(false, body);
+```
+```cURL
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/transaction/BTC \
   --header 'Content-Type: application/json' \
@@ -57,6 +80,7 @@ curl --request POST \
   }
 }'
 ```
+
 **Response example**
 ```json
 {
@@ -68,10 +92,23 @@ We can see that the parameters `chainId`, `sender` and `receiver` are required i
 ---
 ## Getting virtual account transactions
 
-For a withdrawal, a [virtual account transaction](../virtualAccounts/b3A6MjgwOTcwNDg-list-account-transactions) will be created for the source virtual account.
+For a withdrawal, a [virtual account transaction](../virtualAccounts/b3A6MjgwOTcwNDg-list-account-transactions) will be created for the source virtual account. To look up the details of this withdrawal transaction, use the [find transactions for account](https://tatum.io/apidoc#operation/getTransactionsByAccountIdl) endpoint:
 
 **Request example**
-```json
+```JavaScript
+import {getTransactionsByAccount} from '@tatumio/tatum';
+/**
+ * Finds transactions for the account identified by the given account ID.
+ * @param filter - request body with data filter - https://tatum.io/apidoc.php#operation/getTransactionsByAccountId
+ * @param pageSize - max number of items per page is 50.
+ * @param offset - optional Offset to obtain next page of the data.
+ */
+const filter = {
+  id: "5fbc208c99a159b4e9120c30",
+  }
+const tx = getTransactionsByAccount(filter,50,0);
+```
+```cURL
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/transaction/account \
   --header 'Content-Type: application/json' \
@@ -102,6 +139,8 @@ curl --request POST \
   "senderNote": "65426"
 }'
 ```
+The response will contain the details of all transactions from the given account.
+
 **Response example**
 ```json
 [
@@ -135,10 +174,18 @@ curl --request POST \
 ---
 ## Getting a Bitcoin transaction
 
-Below is an example of [getting details of a blockchain transaction](../blockchain/b3A6MjgzNjM1MTY-get-transaction-by-hash-or-address).
+Using the transaction ID of the withdrawal transaction, you can [get the details of the blockchain transaction](../blockchain/b3A6MjgzNjM1MTY-get-transaction-by-hash-or-address).
 
 **Request example**
-```json
+```JavaScript
+import { btcGetTransaction } from '@tatumio/tatum';
+/**
+ * @param hash - transaction hash
+ * @returns - transaction detail
+ */
+const transaction = btcGetTransaction('97bc1c3c23b179cba837e4060c0d07aa399f7ac7d34d91a7405cb5f801b93c8a');
+```
+```cURL
 curl --request GET \
   --url https://api-eu1.tatum.io/v4/blockchain/BTC/transaction/id \
   --header 'Content-Type: application/json' \
