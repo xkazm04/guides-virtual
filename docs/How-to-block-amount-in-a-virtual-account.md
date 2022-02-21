@@ -6,8 +6,9 @@ Most blockchains do not allow blocking or freezing assets at blockchain addresse
 
 There are two types of balances in Tatum Virtual Accounts:
 
-**Account balance** - a sum of all funds that are present in the account
-**Available balance** - a sum of all funds that are not blocked and are therefore available for spending
+- **Account balance** - a sum of all funds that are present in the account
+
+- **Available balance** - a sum of all funds that are not blocked and are therefore available for spending
 
 <!-- theme: info -->
 >Available balance can be negative due to blockages in an account. In such cases transactions cannot be performed, but new blockages can still be made.
