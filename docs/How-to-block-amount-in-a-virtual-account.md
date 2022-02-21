@@ -21,7 +21,22 @@ Every blockage has its unique identifier and details, like type or custom descri
 To block funds in an account identified by `id`, you are required to state the `amount` and `type`. The response is the `id` of the newly created blockage.
 
 **Request example**
-```json
+```JavaScript
+import {blockAmount} from '@tatumio/tatum';
+/**
+ * Blocks an amount in an account.
+ * Any number of distinct amounts can be blocked in one account.
+ * @param id - ledger account ID
+ * @param body - request body with blocked amount - https://tatum.io/apidoc.php#operation/blockAmount
+ */
+const body = {
+  "amount": "5",
+  "type": "DEBIT_CARD_OP",
+  "description": "Card payment in the shop."
+  }
+const txId = blockAmount("5fbaca3001421166273b3779", body);
+```
+```cURL
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/account/block/id \
   --header 'Content-Type: application/json' \
@@ -39,12 +54,21 @@ curl --request POST \
 }
 ```
 ---
-## Getting balance
+## Getting balances
 
 You can now send a request to get the available balance of the account where funds have just been blocked.
 
 **Request example**
-```json
+```JavaScript
+import {getAccountById} from '@tatumio/tatum';
+/**
+ * Gets active account by ID.
+ * Displays all information regarding the given account - https://tatum.io/apidoc.php#operation/getAccountByAccountId
+ * @param id - ledger account ID
+ */
+const account = getAccountById("5fbaca3001421166273b3779");
+```
+```cURL
 curl --request GET \
   --url https://api-eu1.tatum.io/v4/blockchain/BTC/account/address/balance \
   --header 'Content-Type: application/json' \
@@ -53,13 +77,20 @@ curl --request GET \
 ```
 **Response example**
 ```json
-[
-  {
-    "contractAddress": "2MsM67NLa71fHvTUBqNENW15P68nHB2vVXb",
-    "symbol": "BTC",
-    "balance": -4,9999
-  }
-]
+{
+    "currency": "BTC",
+    "active": true,
+    "balance": {
+        "accountBalance": "0.000001",
+        "availableBalance": "-4.999999"
+    },
+    "accountCode": null,
+    "accountNumber": null,
+    "frozen": false,
+    "xpub": "tpubDF1sYuDKCJr6mGietaVzqGmF2dqdKVBa1DtLJGBX8HXhtHZPv5UBz3WNWU22tiVAYSjqfvfFxMnDs3vM11iQrKej6dq33UCevhiPW9EQAS2",
+    "accountingCurrency": "EUR",
+    "id": "5fbaca3001421166273b3779"
+}
 ```
 ---
 
@@ -68,21 +99,33 @@ curl --request GET \
 As you can see above, there are five bitcoins blocked in the account, so the available balance is now negative. Let's get all blockages in this account to see if there are any more.
 
 **Request example**
-```json
+```JavaScript
+import { getBlockedAmountsByAccountId  } from '@tatumio/tatum';
+/**
+ * Gets blocked amounts for an account.
+ * @param id - account ID
+ * @param pageSize - max number of items per page is 50
+ * @param offset - optional Offset to obtain next page of the data
+ * @returns - detail of blocked amounts - https://tatum.io/apidoc.php#operation/getBlockAmount
+ */
+ 
+const amounts = getBlockedAmountsByAccountId("5fbaca3001421166273b3779?pageSize=50");
+```
+```cURL
 curl --request GET \
   --url https://api-eu1.tatum.io/v4/tatum/account/block/id \
   --header 'Content-Type: application/json'
 ```
 **Response example**
 ```json
-
-  {
-    "id": "5e68c66581f2ee32bc354087",
-    "accountId": "5e68c66581f2ee32bc354087",
-    "amount": "5",
-    "type": "DEBIT_CARD_OP",
-    "description": "Card payment in the shop."
-  }
+[
+    {
+        "amount": "5",
+        "type": "DEBIT_CARD_OP",
+        "description": "Card payment in the shop.",
+        "accountId": "5fbaca3001421166273b3779",
+        "id": "5fbe2b9b99166cb792cba6f2"
+    }
 ]
 ```
 In this case, there is just one blockage in the account.
@@ -98,7 +141,16 @@ When you want to unblock an amount from an account, you have several options:
 Let's unblock a blockage without a transaction. You'll need to provide the ID of the specific blockage you want to unblock.
 
 **Request example**
-```json
+```JavaScript
+import {deleteBlockedAmount} from '@tatumio/tatum';
+/**
+ * Unblocks a previously blocked amount in an account.
+ * Increases the available balance in the account where the amount was blocked.
+ * @param id - transaction ID of blocked amount
+ */
+const account = deleteBlockedAmount ("5fbe2b9b99166cb792cba6f2");
+```
+```cURL
 curl --request DELETE \
   --url https://api-eu1.tatum.io/v4/tatum/account/block/id \
   --header 'Content-Type: application/json' \
