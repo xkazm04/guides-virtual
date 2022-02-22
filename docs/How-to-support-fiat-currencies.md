@@ -20,10 +20,25 @@ Every virtual currency inside virtual accounts is pegged to a certain currency f
 ---
 ## Creating a virtual currency
 
-To support FIAT currencies, you can [create your own virtual currency](../virtualAccounts/b3A6MzA5MTQyMTI-create-new-virtual-currency) with the base pair being the currency you want to support.
+To support fiat currencies, you can [create your own virtual currency](../virtualAccounts/b3A6MzA5MTQyMTI-create-new-virtual-currency) with the base pair as the currency you want to support.
 
 **Request example**
-```json
+```JavaScript
+import {Currency, Fiat, createVirtualCurrency } from '@tatumio/tatum';
+/**
+ * Create new virtual currency with given supply stored in account.
+ * This will create Tatum internal virtual currency.
+ * @param data - body of request - https://tatum.io/apidoc.php#operation/createCurrency
+ * @returns virtual currency detail
+ */
+const body = {
+  name: "VC_USD",
+  supply: "100000",
+  basePair: USD
+  }
+const vc = createVirtualCurrency (body);
+```
+```cURL
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/token \
   --header 'Content-Type: application/json' \
@@ -71,7 +86,20 @@ The result of the call is a virtual account of the given virtual currency. The i
 When you want to [increase the supply of a virtual currency](../virtualAccounts/b3A6MzA5MTQyMTU-create-new-supply), you have to mint new units. Minted units are credited to a specific virtual account, and the operation is visible as a new virtual account transaction for that account.
 
 **Request example**
-```json
+```JavaScript
+import { mintVirtualCurrency } from '@tatumio/tatum';
+/**
+ * Create new supply of virtual currency linked on the given accountId.
+ * @param data - body of request - https://tatum.io/apidoc.php#operation/mintCurrency
+ * @returns transaction internal reference
+ */
+const body = {
+  accountId: "5fbe46739045a09adbc3f590",
+  amount: "100",
+  }
+const mint = mintVirtualCurrency (body);
+```
+```cURL
 curl --request PUT \
   --url https://api-eu1.tatum.io/v4/vc/token/mint \
   --header 'Content-Type: application/json' \
@@ -101,7 +129,20 @@ A `reference` to the virtual account transaction is given in the response.
 When you want to [decrease the supply of a virtual currency](../virtualAccounts/b3A6MzA5MTQyMTY-burn-supply), you have to revoke some units. The revoked units are debited from the virtual account they were first credited to, and the operation is visible as a new virtual account transaction for the account.
 
 **Request example**
-```json
+```JavaScript
+import { revokeVirtualCurrency } from '@tatumio/tatum';
+/**
+ * Destroy supply of virtual currency linked on the given accountId.
+ * @param data - body of request - https://tatum.io/apidoc.php#operation/revokeCurrency
+ * @returns transaction internal reference
+ */
+const body = {
+  accountId: "5fbe46739045a09adbc3f590",
+  amount: "100",
+  }
+const burn = revokeVirtualCurrency (body);
+```
+```cURL
 curl --request PUT \
   --url https://api-eu1.tatum.io/v4/vc/token/revoke \
   --header 'Content-Type: application/json' \
@@ -131,7 +172,20 @@ A `reference` to the virtual account transaction is given in the response.
 When we get the [list of account transactions](../virtualAccounts/b3A6MjgwOTcwNDg-list-account-transactions) now, we can see two operations - mint and revoke.
 
 **Request example**
-```json
+```JavaScript
+import {getTransactionsByAccount} from '@tatumio/tatum';
+/**
+ * Finds transactions for the account identified by the given account ID.
+ * @param filter - request body with data filter - https://tatum.io/apidoc.php#operation/getTransactionsByAccountId
+ * @param pageSize - max number of items per page is 50.
+ * @param offset - optional Offset to obtain next page of the data.
+ */
+const filter = {
+  id: "5fbe46739045a09adbc3f590",
+  }
+const tx = getTransactionsByAccount(filter,50,0);
+```
+```cURL
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/transaction/account \
   --header 'Content-Type: application/json' \
@@ -162,6 +216,9 @@ curl --request POST \
   "senderNote": "65426"
 }'
 ```
+
+In the response, we can see the two transactions we have just performed - **mint** and **revoke**.
+
 **Response example**
 ```json
 [
@@ -193,7 +250,7 @@ curl --request POST \
 ```
 ---
 ## Typical integration steps
-Due to legislative restrictions, it is impossible to integrate Tatum directly into a specific bank or card processor to read and perform bank transactions. Bank integration must be done in your application and reflect your bank operations into Tatum.
+Due to legislative restrictions, it is impossible to integrate Tatum directly into a specific bank or card processor to read and perform bank transactions. The bank integration must be done in your application and reflect your bank operations into Tatum.
 
 The typical flow is as follows:
 
@@ -201,6 +258,6 @@ The typical flow is as follows:
 - When you send a payment from your bank account, you can revoke the supply from the connected user account.
 - You will then perform all internal transactions within the Tatum virtual accounts and your application ecosystem.
 
-For more information on how to support virtual accounts in a crypto exchange, please refer to the following workshop:
+For more information on how to support virtual accounts and currencies in a crypto exchange, please refer to the following workshop:
 
 https://www.youtube.com/watch?v=CGgyyTTv0yw&t=209s&ab_channel=Tatum
