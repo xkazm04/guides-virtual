@@ -23,6 +23,7 @@ Every virtual currency inside virtual accounts is pegged to a certain currency f
 To support fiat currencies, you can [create your own virtual currency](../virtualAccounts/b3A6MzA5MTQyMTI-create-new-virtual-currency) with the base pair as the currency you want to support.
 
 **Request example**
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import {Currency, Fiat, createVirtualCurrency } from '@tatumio/tatum';
 /**
@@ -60,8 +61,7 @@ curl --request POST \
   "accountingCurrency": "AED"
 }'
 ```
-**Response example**
-```json
+```Response
 {
   "id": "5e68c66581f2ee32bc354087",
   "balance": {
@@ -76,6 +76,7 @@ curl --request POST \
   "xpub": "xpub6FB4LJzdKNkkpsjggFAGS2p34G48pqjtmSktmK2Ke3k1LKqm9ULsg8bGfDakYUrdhe2EHw5uGKX9DrMbrgYnVfDwrksT4ZVQ3vmgEruo3Ka"
 }
 ```
+</div>
 The result of the call is a virtual account of the given virtual currency. The initial supply of the virtual currency is already credited to the account.
 
 ---
@@ -86,6 +87,7 @@ The result of the call is a virtual account of the given virtual currency. The i
 When you want to [increase the supply of a virtual currency](../virtualAccounts/b3A6MzA5MTQyMTU-create-new-supply), you have to mint new units. Minted units are credited to a specific virtual account, and the operation is visible as a new virtual account transaction for that account.
 
 **Request example**
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import { mintVirtualCurrency } from '@tatumio/tatum';
 /**
@@ -115,12 +117,15 @@ curl --request PUT \
   "senderNote": "Sender note"
 }'
 ```
+</div>
 **Response example**
+<div class='tabbed-code-blocks'>
 ```json
 {
   "reference": "0c64cc04-5412-4e57-a51c-ee5727939bcb"
 }
 ```
+</div>
 A `reference` to the virtual account transaction is given in the response.
 
 ---
@@ -129,6 +134,7 @@ A `reference` to the virtual account transaction is given in the response.
 When you want to [decrease the supply of a virtual currency](../virtualAccounts/b3A6MzA5MTQyMTY-burn-supply), you have to revoke some units. The revoked units are debited from the virtual account they were first credited to, and the operation is visible as a new virtual account transaction for the account.
 
 **Request example**
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import { revokeVirtualCurrency } from '@tatumio/tatum';
 /**
@@ -158,6 +164,7 @@ curl --request PUT \
   "senderNote": "Sender note"
 }'
 ```
+</div>
 **Response example**
 ```json
 {
@@ -172,6 +179,7 @@ A `reference` to the virtual account transaction is given in the response.
 When we get the [list of account transactions](../virtualAccounts/b3A6MjgwOTcwNDg-list-account-transactions) now, we can see two operations - mint and revoke.
 
 **Request example**
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import {getTransactionsByAccount} from '@tatumio/tatum';
 /**
@@ -216,7 +224,7 @@ curl --request POST \
   "senderNote": "65426"
 }'
 ```
-
+</div>
 In the response, we can see the two transactions we have just performed - **mint** and **revoke**.
 
 **Response example**

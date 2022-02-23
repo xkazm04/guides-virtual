@@ -47,13 +47,11 @@ We are going to set up a virtual account on the Bitcoin blockchain. For more inf
 
 Use the following API endpoint to generate a virtual account from the xpub of a Bitcoin wallet.
 
-**Request example**
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import { Account, Currency, CreateAccount, createAccount } from "@tatumio/tatum";
 import { config } from "dotenv";
-
 config();
-
 const createNewAccount = async () => {
   const createAccountData: CreateAccount = {
     currency: Currency.BTC,
@@ -62,7 +60,6 @@ const createNewAccount = async () => {
   const accoun: Account = await createAccount(createAccountData);
   console.log(accoun);
 };
-
 createNewAccount();
 ```
 ```cURL
@@ -74,6 +71,7 @@ curl --location --request POST 'https://api-eu1.tatum.io/v3/ledger/account' \
     "xpub": "tpubDE8GQ9vAXpwkp37PCCRUpCoeShpC4WiCcACxh8r3nnKjfRPRqw3w58EgkfNiBy1MaRqX1oAAxwAxauEUG7vWupSh5m15znGy7vE7aE6CWzb"
 }'
 ```
+</div>
 The response contains information about your newly generated virtual account.
 
 **Response example**
@@ -103,6 +101,7 @@ Now that you've created a virtual account, you must synchronize it with the bloc
 Use the [create new deposit address](https://tatum.io/apidoc#operation/generateDepositAddress) endpoint to generate an address for the account.
 
 **Request example**
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import { generateDepositAddress, Address } from "@tatumio/tatum";
 import { config } from "dotenv";
@@ -121,7 +120,7 @@ createNewDepositAddress();
 curl --location --request POST 'https://api-eu1.tatum.io/v3/offchain/account/5fb7bdf6e96d9ab593e191a5/address' \
 --header 'x-api-key: YOUR_API_KEY'
 ```
-
+</div>
 The response will contain the blockchain address you have just generated.
 
 **Response example**
@@ -143,7 +142,7 @@ It is possible to work with only one blockchain address connected to the account
 Your app's users will most likely want to be able to see all of the addresses connected to their account. You can view all a list of them using the off-chain method [Get all deposit addresses](https://tatum.io/apidoc#operation/getAllDepositAddresses).
 
 **Request example**
-
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import { getDepositAddressesForAccount } from '@tatumio/tatum';
 /**
@@ -158,7 +157,7 @@ const addresses = getDepositAddressesForAccount ("5fb7bdf6e96d9ab593e191a5");
 curl --location --request GET 'https://api-eu1.tatum.io/v3/offchain/account/5fb7bdf6e96d9ab593e191a5/address' \
 --header 'x-api-key: YOUR_API_KEY'
 ```
-
+</div>
 The response will contain a list of all deposit addresses connected to the virtual account.
 
 **Response example**
@@ -185,7 +184,7 @@ In Tatum virtual accounts, webhook notifications work as **subscriptions** to th
 To set up webhook notifications for incoming blockchain transactions, use the following API call:
 
 **Request example**
-
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import { createNewSubscription, CreateSubscription, SubscriptionType } from '@tatumio/tatum'
 
@@ -213,7 +212,7 @@ curl --request POST \
         }
      }'
 ```
-
+</div>
 The required parameters are for an incoming transactions subscription are:
 
 - `type` - the type of subscription you are creating

@@ -25,6 +25,7 @@ All of these actions can be performed as [one API call](../virtualAccounts/b3A6M
 This operation will [withdraw BTC from a virtual account to a blockchain address](https://tatum.io/apidoc.php#operation/BtcTransfer).
 
 **Request example**
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import {sendBitcoinOffchainTransaction} from '@tatumio/tatum';
 /**
@@ -80,13 +81,16 @@ curl --request POST \
   }
 }'
 ```
+</div>
 
 **Response example**
+<div class='tabbed-code-blocks'>
 ```json
 {
   "reference": "0c64cc04-5412-4e57-a51c-ee5727939bcb"
 }
 ```
+</div>
 We can see that the parameters `chainId`, `sender` and `receiver` are required in this call. The `reference` parameter in the response is a unique identifier within the Tatum ledger. In case of failure, use this value to search for problems.
 
 ---
@@ -95,6 +99,7 @@ We can see that the parameters `chainId`, `sender` and `receiver` are required i
 For a withdrawal, a [virtual account transaction](../virtualAccounts/b3A6MjgwOTcwNDg-list-account-transactions) will be created for the source virtual account. To look up the details of this withdrawal transaction, use the [find transactions for account](https://tatum.io/apidoc#operation/getTransactionsByAccountIdl) endpoint:
 
 **Request example**
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import {getTransactionsByAccount} from '@tatumio/tatum';
 /**
@@ -139,6 +144,8 @@ curl --request POST \
   "senderNote": "65426"
 }'
 ```
+</div>
+
 The response will contain the details of all transactions from the given account.
 
 **Response example**
@@ -177,6 +184,7 @@ The response will contain the details of all transactions from the given account
 Using the transaction ID of the withdrawal transaction, you can [get the details of the blockchain transaction](../blockchain/b3A6MjgzNjM1MTY-get-transaction-by-hash-or-address).
 
 **Request example**
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import { btcGetTransaction } from '@tatumio/tatum';
 /**
@@ -192,7 +200,9 @@ curl --request GET \
   --header 'env: ' \
   --header 'x-api-key: '
 ```
+</div>
 **Response example**
+<div class='tabbed-code-blocks'>
 ```json
 [
   {
@@ -219,6 +229,7 @@ curl --request GET \
   }
 ]
 ```
+</div>
 
 The required parameters for this call are `chainId`, which represents a supported blockchain, and `id`, which is the transaction hash or the user address related with the searched transaction.
 Optional parameters are `from`, `offset`, `sort` and `to`.

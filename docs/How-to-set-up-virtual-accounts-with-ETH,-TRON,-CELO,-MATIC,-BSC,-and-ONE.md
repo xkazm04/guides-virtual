@@ -38,7 +38,7 @@ First, we will show you how to generate a wallet and create virtual accounts and
 Use the following API endpoint to generate a wallet on Polygon:
 
 **Request example**
-
+<div class='tabbed-code-blocks'>
 ```JavaScript
 // You need to install the Javascript library
 // https://github.com/tatumio/tatum-js
@@ -55,7 +55,7 @@ curl --request GET \
 ```KMS
 tatum-kms storemanagedwallet MATIC --testnet
 ```
-
+</div>
 The response will be the wallet's xpub and mnemonic.
 
 **Response example**
@@ -71,12 +71,11 @@ The response will be the wallet's xpub and mnemonic.
 Next, you can [create virtual accounts](https://tatum.io/apidoc.php#operation/createAccount) from the xpub of the wallet.
 
 **Request example**
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import { Account, Currency, CreateAccount, createAccount } from "@tatumio/tatum";
 import { config } from "dotenv";
-
 config();
-
 const createNewAccount = async () => {
   const createAccountData: CreateAccount = {
     currency: Currency.MATIC,
@@ -85,7 +84,6 @@ const createNewAccount = async () => {
   const accoun: Account = await createAccount(createAccountData);
   console.log(accoun);
 };
-
 createNewAccount();
 ```
 ```cURL
@@ -98,7 +96,7 @@ curl --request POST \
       "xpub":"xpub6EsCk1uU6cJzqvP9CdsTiJwT2rF748YkPnhv5Qo8q44DG7nn2vbyt48YRsNSUYS44jFCW9gwvD9kLQu9AuqXpTpM1c5hgg9PsuBLdeNncid"      
       }'
 ```
-
+</div>
 The response will contain details about your newly created account, including the account `id`, which is be used to identify the account within Tatum.
 
 **Response example**
@@ -161,18 +159,16 @@ The response will contain the blockchain address you have just generated.
 Alternatively, you can connect the virtual accounts you created above to existing blockchain addresses. To do so, use the [assign address to account](https://tatum.io/apidoc.php#operation/assignAddress) endpoint, and enter the account ID of a virtual account and the blockchain address you'd like to connect it to:
 
 **Request example**
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import { assignDepositAddress, Address } from "@tatumio/tatum";
 import { config } from "dotenv";
-
 config();
-
 const assignAddress = async (address) => {
     const id = account.id;
     const address: Address = await assignDepositAddress(id, address);
     console.log(address);
 };
-
 assignAddress();
 ```
 ```cURL
@@ -180,7 +176,7 @@ curl --request POST \
   --url 'https://api-eu1.tatum.io/v3/offchain/account/{id}/address/{address}' \
   --header 'x-api-key: REPLACE_KEY_VALUE'
 ```
-
+</div>
 The response will contain the address that has been assigned to the virtual account.
 
 **Response example**
@@ -234,12 +230,10 @@ However, you, as the application owner, must keep track of which private key is 
 In this approach, you should create a deposit address on the blockchain to which you will send every incoming transaction received to every deposit address. Use the following API endpoint to [generate a deposit address on Polygon](https://tatum.io/apidoc.php#operation/PolygonGenerateAddress):
 
 **Request example**
-
+<div class='tabbed-code-blocks'>
 ```JavaScript
 const {generateAddressFromXPub, generateWallet, Currency} = require("@tatumio/tatum");
-
 const wallet = generateWallet(Currency.MATIC, false);
-
 const maticWallet = generateAddressFromXPub(Currency.MATIC, false, wallet.xpub, 0);
 console.log(maticWallet);
 ```
@@ -248,7 +242,7 @@ curl --request GET \
   --url https://api-eu1.tatum.io/v3/polygon/address/{xpub}/{index} \
   --header 'x-api-key: REPLACE_KEY_VALUE'
 ```
-
+</div>
 The response will contain the address you have just generated.
 
 **Response example**

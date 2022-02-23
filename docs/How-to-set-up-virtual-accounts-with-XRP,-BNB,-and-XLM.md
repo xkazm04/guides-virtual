@@ -22,19 +22,16 @@ In this guide, we will be using XRP to demonstrate how to set up virtual account
 
 Use the following API endpoint to [generate an XRP wallet](https://tatum.io/apidoc.php#operation/XrpWallet):
 
+<div class='tabbed-code-blocks'>
 **Request example**
-
 ```JavaScript
 import { generateXrpWallet } from "@tatumio/tatum";
 import { config } from "dotenv";
-
 config();
-
 const generateWallet = () => {
   const wallet = generateXrpWallet();
   console.log(wallet);
 };
-
 generateWallet();
 ```
 ```cURL
@@ -45,7 +42,7 @@ curl --request GET \
 ```KMS
 tatum-kms storemanagedwallet XRP --testnet
 ```
-
+</div>
 The response will contain your wallet's xpub in the "address" field and private key in the "secret" field.
 
 **Response example**
@@ -67,13 +64,11 @@ Now, you can generate XRP virtual accounts connected to the xpub of the wallet y
 Use the following API endpoint to [generate XRP virtual accounts](https://tatum.io/apidoc.php#operation/createAccount). In the "xpub" field, enter the xpub of the wallet you generated in the previous step.
 
 **Request example**
-
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import { Account, Currency, CreateAccount, createAccount } from "@tatumio/tatum";
 import { config } from "dotenv";
-
 config();
-
 const createNewAccount = async () => {
   const createAccountData: CreateAccount = {
     currency: Currency.XRP,
@@ -82,7 +77,6 @@ const createNewAccount = async () => {
   const accoun: Account = await createAccount(createAccountData);
   console.log(accoun);
 };
-
 createNewAccount();
 ```
 ```cURL
@@ -105,7 +99,7 @@ curl --request POST \
       "accountNumber":"123456"
       }'
 ```
-
+</div>
 The response will contain details about your newly created virtual account.
 
 **Response example**
@@ -133,18 +127,16 @@ Finally, we create deposit addresses for each virtual account. Again, these depo
 Use the following API endpoint to [generate deposit addresses for each virtual account](https://tatum.io/apidoc.php#operation/generateDepositAddress):
 
 **Request example**
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import { generateDepositAddress, Address } from "@tatumio/tatum";
 import { config } from "dotenv";
-
 config();
-
 const createNewDepositAddress = async () => {
     const id = account.id;
     const address: Address = await generateDepositAddress(id);
     console.log(address);
 };
-
 createNewDepositAddress();
 ```
 ```cURL
@@ -152,8 +144,8 @@ curl --request POST \
   --url 'https://api-eu1.tatum.io/v3/offchain/account/{id}/address?index=1' \
   --header 'x-api-key: REPLACE_KEY_VALUE'
 ```
+</div>
 The response will contain your newly generated `address` which is connected to the virtual account.
-
 **Response example**
 
 ```json

@@ -26,7 +26,7 @@ In this guide, we will use examples for the Bitcoin blockchain, but the process 
 To [generate a Bitcoin wallet](https://tatum.io/apidoc.php#operation/BtcGenerateWallet), use the following API endpoint:
 
 **Request example**
-
+<div class='tabbed-code-blocks'>
 ```JavaScript
 // You need to install the Javascript library
 // https://github.com/tatumio/tatum-js
@@ -43,7 +43,7 @@ curl --request GET \
 ```KMS
 tatum-kms storemanagedwallet BTC --testnet
 ```
-
+</div>
 The response will contain the wallet's mnemonic and xpub.
 
 **Response example**
@@ -68,13 +68,11 @@ Now, you can generate BTC virtual accounts connected to the xpub of the wallet y
 Use the following API endpoint to [generate BTC virtual accounts](https://tatum.io/apidoc.php#operation/createAccount). In the "xpub" field, enter the xpub of the wallet you generated in the previous step.
 
 **Request example**
-
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import { Account, Currency, CreateAccount, createAccount } from "@tatumio/tatum";
 import { config } from "dotenv";
-
 config();
-
 const createNewAccount = async () => {
   const createAccountData: CreateAccount = {
     currency: Currency.BTC,
@@ -83,7 +81,6 @@ const createNewAccount = async () => {
   const accoun: Account = await createAccount(createAccountData);
   console.log(accoun);
 };
-
 createNewAccount();
 ```
 ```cURL
@@ -93,7 +90,7 @@ curl --request POST \
   --header 'x-api-key: REPLACE_KEY_VALUE' \
   --data '{
       "currency":"BTC",
-      "xpub":"tpubDEvtqDzBrGVtGJ3yvSV8khBNFa5FVTFu25YQTKfDQUvSp2zFcQzy1dPgKXKHBzKgygHeefpp4ASmJCi5x9bjiJzbJ9XQczd76NgrS1tzZY1",
+"xpub":"tpubDEvtqDzBrGVtGJ3yvSV8khBNFa5FVTFu25YQTKfDQUvSp2zFcQzy1dPgKXKHBzKgygHeefpp4ASmJCi5x9bjiJzbJ9XQczd76NgrS1tzZY1",
       "customer":{
           "accountingCurrency":"USD",
           "customerCountry":"US",
@@ -106,7 +103,7 @@ curl --request POST \
       "accountNumber":"123456"
       }'
 ```
-
+</div>
 **Response example**
 
 ```json
@@ -130,26 +127,24 @@ Finally, we create deposit addresses for each virtual account. Again, these depo
 Use the following API endpoint to [generate deposit addresses for each virtual account](https://tatum.io/apidoc.php#operation/generateDepositAddress):
 
 **Request example**
-
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import { generateDepositAddress, Address } from "@tatumio/tatum";
 import { config } from "dotenv";
-
 config();
-
 const createNewDepositAddress = async () => {
     const id = account.id;
     const address: Address = await generateDepositAddress(id);
     console.log(address);
 };
-
 createNewDepositAddress();
 ```
 ```cURL
 curl --request POST \
   --url 'https://api-eu1.tatum.io/v3/offchain/account/{id}/address?index=1' \
   --header 'x-api-key: REPLACE_KEY_VALUE'
-  ```
+```
+</div>
 
 **Response example**
 ```json

@@ -8,9 +8,8 @@ This guide describes how to withdraw assets from virtual accounts connected to g
 
 The first step is to [create a gas pump wallet](https://tatum.io/apidoc.php#operation/GenerateCustodialWallet) for every user. You can choose which ERC-* standards you want to support in the wallet - native assets like ETH or BSC are supported by default. In this example, we will support the native currency (MATIC) on Polygon and any ERC-20 tokens running on the Polygon network.
 
-**Request example**
-
-```json
+<div class='tabbed-code-blocks'>
+```Request
 curl --location --request POST 'https://api-eu1.tatum.io/v3/blockchain/sc/custodial' \
 --header 'Content-Type: application/json' \
 --header 'x-api-key: YOUR_API_KEY' \
@@ -23,10 +22,7 @@ curl --location --request POST 'https://api-eu1.tatum.io/v3/blockchain/sc/custod
     "fromPrivateKey": "0x37b091fc4ce46a56da643f021254612551dbe0944679a6e09cb5724d3085c9ab"
 }'
 ```
-
-**Response example**
-
-```json
+```Response
 {
     "txId": "0x2979a3d30f812b0d9ebcc66d01b620d3779380c38e8770a82fa4ea4f2dfa8f69"
 }
@@ -38,8 +34,8 @@ The response gives us a hash of the transaction. We can [obtain the contract add
 
 Now we need to [create virtual accounts](../virtualAccounts/b3A6MzA5MTQyMTI-create-new-virtual-currency). Since we have decided to support two currencies, MATIC and USDC, we need to create two virtual accounts for every user. These accounts do not have xpubs because we will manually assign the address to them later.
 
-**Request example**
-```json
+<div class='tabbed-code-blocks'>
+```request
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/account \
   --header 'Content-Type: application/json' \
@@ -59,8 +55,7 @@ curl --request POST \
   "accountNumber": "123456"
 }'
 ```
-**Response example**
-```json
+```response
 {
   "id": "5e68c66581f2ee32bc354087",
   "balance": {
@@ -75,17 +70,17 @@ curl --request POST \
   "xpub": "xpub6FB4LJzdKNkkpsjggFAGS2p34G48pqjtmSktmK2Ke3k1LKqm9ULsg8bGfDakYUrdhe2EHw5uGKX9DrMbrgYnVfDwrksT4ZVQ3vmgEruo3Ka"
 }
 ```
+</div>
 Once an account has been created, we need to [assign the gas pump address](../virtualAccounts/b3A6MzEwNDI1NTU-asssign-address-to-account) to it. This process enables automatic incoming transaction synchronization for the specified address and currency.
 
-**Request example**
-```json
+<div class='tabbed-code-blocks'>
+```Request
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/account/id/address/address \
   --header 'Content-Type: application/json' \
   --header 'x-api-key: '
 ```
-**Response example**
-```json
+```Response
 {
   "address": "7c21ed165e294db78b95f0f181086d6f",
   "currency": "BTC",
@@ -96,6 +91,7 @@ curl --request POST \
   "message": "5"
 }
 ```
+</div>
 The response contains a blockchain `address` that has been connected to a virtual account. Any incoming blockchain transaction to this address will be automatically detected and the account balance will be updated.
 
 ---
@@ -113,8 +109,8 @@ Let's withdraw 1 USDC from an account to the blockchain.
 
 First you need to send a [request for withdrawal](../virtualAccounts/b3A6MjgwOTI1Njk-create-withdrawal) from the virtual account so that, after performing the blockchain operation, the virtual account would be synchronized.
 
-**Request example**
-```json
+<div class='tabbed-code-blocks'>
+```Request
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/withdrawal \
   --header 'Content-Type: application/json' \
@@ -132,11 +128,8 @@ curl --request POST \
   "paymentId": "12345",
   "senderNote": "Sender note"
 }'
-
 ```
-**Response example**
-
-```json
+```Response
 {
   "reference": "5e6be8e9e6aa436299950c41",
   "data": [
@@ -159,6 +152,7 @@ curl --request POST \
   "id": "5e68c66581f2ee32bc354087"
 }
 ```
+</div>
 The response contains a virtual account transaction `reference` and a withdrawal `id`. The account balance has been debited with 1 USDC and the transaction is visible in the transaction list of the virtual account. So far, nothing has been done on the blockchain.
 
 #### Perform a blockchain transaction
@@ -166,7 +160,8 @@ The response contains a virtual account transaction `reference` and a withdrawal
 Now it's time to [move the assets to another address](../virtualAccounts/b3A6MjgxMjcyNTM-blockchain-transfer). You don't have to send any MATIC there to pay for gas. You only need to specify which assets should be sent, how much, and where.
 
 **Request example**
-```json
+<div class='tabbed-code-blocks'>
+```Request
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/transaction/chainId \
   --header 'Content-Type: application/json' \
@@ -203,12 +198,12 @@ curl --request POST \
   }
 }'
 ```
-**Response example**
-```json
+```Response
 {
   "reference": "0c64cc04-5412-4e57-a51c-ee5727939bcb"
 }
 ```
+</div>
 The response contains a `reference` property which represents a unique identifier within the Tatum ledger. In case of a failure, use this value to search for problems.
 #### Complete or cancel the withdrawal
 

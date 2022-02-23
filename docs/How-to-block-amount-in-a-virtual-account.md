@@ -25,8 +25,7 @@ When you want to connect a custom ERC-20 token to virtual accounts and utilize o
 
 If you want to support an existing ERC-20 token, you only need to create a virtual currency representing the ERC-20 token inside virtual accounts. You need to enter the symbol of the existing ERC-20 (`symbol`); supply which will be credited to the virtual account inside Tatum (`supply`); a base pair (`basePair`); and the blockchain address where the initial supply was transferred (`address`). Let's use the [Tatum Test Token](https://ropsten.etherscan.io/token/0xb3858430b7ed404747b9561027d2c01a72610f43), an ERC-20 token issued for testing purposes by Tatum.
 
-**Request example**
-```json
+```request
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/token/ETH/erc20/deploy \
   --header 'Content-Type: application/json' \
@@ -47,15 +46,14 @@ curl --request POST \
   }
 }'
 ```
-
-**Response example**
-
-```json
+```response
 {
   "txId": "c83f8818db43d9ba4accfe454aa44fc33123d47a4f89d47b314d6748eb0e9bc9",
   "failed": false
 }
 ```
+</div>
+
 The response includes the virtual `txId` with the account balance of the supply at the blockchain address. The account is frozen unless the virtual currency is connected to a specific ERC-20 on the blockchain.
 
 To unfreeze the account and connect the virtual currency to a blockchain ERC-20 token, you need to provide account ID (`id`) of the virtual currency as seen in the request below.
@@ -81,8 +79,8 @@ In this step, you will create a new ERC-20 on the blockchain, create a virtual c
 > Blockchain transactions are signed using a private key via API, which is not a secure way of signing transactions. Your private keys and mnemonics should never leave your security perimeter. To correctly and securely sign a transaction, you can use the [Tatum CLI](https://github.com/tatumio/tatum-cli); a specific language library like [Tatum JS](https://github.com/tatumio/tatum-js); local [middleware API](https://github.com/tatumio/tatum-middleware); or our complex key management system, [Tatum KMS](https://github.com/tatumio/tatum-kms).
 
 
-**Request example**
-```json
+<div class='tabbed-code-blocks'>
+```Request
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/token \
   --header 'Content-Type: application/json' \
@@ -104,9 +102,7 @@ curl --request POST \
   "accountingCurrency": "AED"
 }'
 ```
-**Response example**
-
-```json
+```Response
 {
   "id": "5e68c66581f2ee32bc354087",
   "balance": {
@@ -121,20 +117,21 @@ curl --request POST \
   "xpub": "xpub6FB4LJzdKNkkpsjggFAGS2p34G48pqjtmSktmK2Ke3k1LKqm9ULsg8bGfDakYUrdhe2EHw5uGKX9DrMbrgYnVfDwrksT4ZVQ3vmgEruo3Ka"
 }
 ```
+</div>
+
 The response includes the `id` of the virtual account, with `accountBalance` being the supply at the blockchain address. The account is frozen (`"frozen": true`) unless the virtual currency is connected to a specific ERC-20 on the blockchain.
 
 The second property is the `transaction ID` of the blockchain transaction that created the ERC-20 token. To obtain the contract address, you need to [get the details of the transaction](https://dxh.stoplight.io/docs/blockchain/b3A6MjgzNjM1MTY-get-transaction-by-hash-or-address). You can see the property `contractAddress`, which is the address of the ERC-20 token.
 
-**Request example**
-```json
+<div class='tabbed-code-blocks'>
+```Request
 curl --request GET \
   --url https://api-eu1.tatum.io/v4/blockchain/chainId/transaction/id \
   --header 'Content-Type: application/json' \
   --header 'env: ' \
   --header 'x-api-key: '
 ```
-**Response example**
-```json
+```Response
 [
   {
     "block": {
@@ -160,17 +157,17 @@ curl --request GET \
   }
 ]
 ```
+</div>
 
 
 To unfreeze the account and connect the virtual currency to a blockchain ERC-20 token, you need to [provide the address of the ERC-20 token](https://tatum.io/apidoc.php#operation/storeTokenAddress) and the name of the virtual currency as seen in the request below.
 
-**Request example**
-```json
+<div class='tabbed-code-blocks'>
+```request
 curl --location --request POST 'https://api-eu1.tatum.io/v3/offchain/token/TestToken/0x5a14C4ebc2e20eEB820C5197fc408a3CB9E27B75' \
 --header 'x-api-key: YOUR_API_KEY '
 ```
-**Request example**
-```json
+```response
 curl --request PUT \
   --url https://api-eu1.tatum.io/v4/tatum/account/id/unfreeze \
   --header 'Content-Type: application/json' \

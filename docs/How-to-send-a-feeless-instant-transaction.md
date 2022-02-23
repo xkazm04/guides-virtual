@@ -20,13 +20,13 @@ A virtual account transaction is a transaction that is settled immediately with 
 >Tatum supports microtransactions. You can send as little as 1/1000000 of a Satoshi (Bitcoin denomination) or 1/1000000 of a Wei (Ethereum denomination) between virtual accounts.
 
 **Request example**
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import {storeTransaction} from '@tatumio/tatum';
 /**
  * Sends a payment from one virtual account to another
  * @param transaction - body of the request - https://tatum.io/apidoc.php#operation/sendTransaction
  */
- 
 const body = {
   senderAccountId: "5fad2aa1cac7f2e8aeac0e6b",
   recipientAccountId: "5fbaca3001421166273b3779",
@@ -39,7 +39,6 @@ const body = {
   baseRate: 1,
   senderNote: "Sender note"
 };
- 
 const txReference = storeTransaction(body);
 ```
 ```cURL
@@ -53,6 +52,7 @@ POST 'https://api-eu1.tatum.io/v4/ledger/transaction' \
   "amount": "0.000001"
 }'
 ```
+</div>
 The response contains a transaction `reference` ID that can be used to get the details of the transaction.
 
 **Response example**
@@ -73,6 +73,7 @@ When you perform a [virtual account transaction](https://tatum.io/apidoc#operati
 To get the details of both transactions, enter the reference ID of the virtual account transaction from the previous step into the following API call:
 
 **Request example**
+<div class='tabbed-code-blocks'>
 ```JavaScript
 import {getTransactionsByReference} from '@tatumio/tatum';
 /**
@@ -86,6 +87,7 @@ const tx = getTransactionsByReference("9e179f90-0221-480f-adb4-28bd1937bb20");
 curl --location --request GET 'https://api-eu1.tatum.io/v3/ledger/transaction/reference/9e179f90-0221-480f-adb4-28bd1937bb20' \
 --header 'x-api-key: YOUR_API_KEY '
 ```
+</div>
 
 **Response example**
 ```json
