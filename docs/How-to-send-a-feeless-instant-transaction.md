@@ -8,20 +8,22 @@ To avoid these types of transactions and the fees that invariably come with them
 
 It's both extremely easy and highly practical to utilize virtual accounts to send instant transactions. As a prerequisite, you must have at least two virtual accounts with assets on at least one of them.
 
+[How to automatically scan blockchain addresses and set up webhook notifications](url)
+
 ---
 ## Performing a transaction between virtual accounts
 
-A virtual account transaction is a transaction that is settled immediately with no blockchain fee incurred. It is a transaction between two virtual accounts with the same account currency, e.g. Bitcoin accounts, Ethereum accounts, or your custom fiat accounts.
+A [virtual account transaction](https://developer.tatum.io/rest/virtual-accounts/send-payment) is a transaction that is settled immediately with no blockchain fee incurred. It is a transaction between two virtual accounts with the same account currency, e.g. Bitcoin accounts, Ethereum accounts, or your custom fiat accounts.
 
 
-<!-- theme: info -->
+<div class="toolbar-note">
+#### Tatum Virtual Accounts
+Tatum supports microtransactions. You can send as little as 1/1000000 of a Satoshi (Bitcoin denomination) or 1/1000000 of a Wei (Ethereum denomination) between virtual accounts.
+</div>
 
-> #### Tatum Virtual Accounts
->Tatum supports microtransactions. You can send as little as 1/1000000 of a Satoshi (Bitcoin denomination) or 1/1000000 of a Wei (Ethereum denomination) between virtual accounts.
 
-**Request example**
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 import {storeTransaction} from '@tatumio/tatum';
 /**
  * Sends a payment from one virtual account to another
@@ -41,7 +43,7 @@ const body = {
 };
 const txReference = storeTransaction(body);
 ```
-```cURL
+```REST API call
 curl --location --request 
 POST 'https://api-eu1.tatum.io/v4/ledger/transaction' \
 --header 'x-api-key: YOUR_API_KEY ' \ 
@@ -53,9 +55,10 @@ POST 'https://api-eu1.tatum.io/v4/ledger/transaction' \
 }'
 ```
 </div>
+
 The response contains a transaction `reference` ID that can be used to get the details of the transaction.
 
-**Response example**
+**Response:**
 ```json
 {
   "reference": "9e179f90-0221-480f-adb4-28bd1937bb20"
@@ -72,9 +75,8 @@ When you perform a [virtual account transaction](https://tatum.io/apidoc#operati
 
 To get the details of both transactions, enter the reference ID of the virtual account transaction from the previous step into the following API call:
 
-**Request example**
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 import {getTransactionsByReference} from '@tatumio/tatum';
 /**
  * Finds transactions for all accounts with the given reference.
@@ -83,13 +85,13 @@ import {getTransactionsByReference} from '@tatumio/tatum';
  
 const tx = getTransactionsByReference("9e179f90-0221-480f-adb4-28bd1937bb20");
 ```
-```cURL
+```REST API call
 curl --location --request GET 'https://api-eu1.tatum.io/v3/ledger/transaction/reference/9e179f90-0221-480f-adb4-28bd1937bb20' \
 --header 'x-api-key: YOUR_API_KEY '
 ```
 </div>
 
-**Response example**
+**Response:**
 ```json
 [
     {
@@ -137,13 +139,13 @@ curl --location --request GET 'https://api-eu1.tatum.io/v3/ledger/transaction/re
 ]
 ```
 
-<!-- theme: info -->
-
-> #### Tatum Virtual Accounts
->The market value in the transaction is part of the compliance engine built into Tatum Virtual Accounts. It records the exact value of the transaction in fiat currencies - US Dollars, Euros, etc. Currency is obtained from the account property `accountingCurrency`.
+<div class="toolbar-note">
+#### Tatum Virtual Accounts
+The market value in the transaction is part of the compliance engine built into Tatum Virtual Accounts. It records the exact value of the transaction in fiat currencies - US Dollars, Euros, etc. Currency is obtained from the account property `accountingCurrency`.
+</div>
 
 ---
 
 ## And that's it!
 
-You can easily perform instant transactions and get details about them with 2 API calls. You can also obtain a [list of transactions for the specific account](https://tatum.io/apidoc#operation/getTransactionsByAccountId) or [find customer transactions across multiple accounts](https://tatum.io/apidoc#operation/getTransactionsByCustomerId).
+You can easily perform instant transactions and get details about them with 2 API calls. You can also obtain a [list of transactions for the specific account](https://developer.tatum.io/rest/virtual-accounts/find-transactions-for-account) or [find customer transactions across multiple accounts](https://developer.tatum.io/rest/virtual-accounts/find-transactions-for-a-customer-across-all-of-the-customer-s-accounts).
