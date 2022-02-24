@@ -17,17 +17,17 @@ In this guide, you will learn how to set up virtual accounts to work with the UT
 
 ## Generate a wallet
 
-<!-- theme: warning -->
-
->In this guide, we will generate just one blockchain wallet for all of our virtual accounts. All of the virtual accounts within your app must be connected to the same wallet. If virtual accounts are connected to deposit addresses generated from different extended public keys (xpubs) from different wallets, they will not function properly.
+<div class="toolbar-warning">
+In this guide, we will generate just one blockchain wallet for all of our virtual accounts. All of the virtual accounts within your app must be connected to the same wallet. If virtual accounts are connected to deposit addresses generated from different extended public keys (xpubs) from different wallets, they will not function properly.
+</div>
 
 In this guide, we will use examples for the Bitcoin blockchain, but the process is the same for all of the other blockchains listed above.
 
-To [generate a Bitcoin wallet](https://tatum.io/apidoc.php#operation/BtcGenerateWallet), use the following API endpoint:
+To [generate a Bitcoin wallet](https://developer.tatum.io/rest/blockchain/generate-bitcoin-wallet), use the following API endpoint:
 
 **Request example**
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 // You need to install the Javascript library
 // https://github.com/tatumio/tatum-js
 const {generateWallet, Currency} = require("@tatumio/tatum");
@@ -35,7 +35,7 @@ const {generateWallet, Currency} = require("@tatumio/tatum");
 const btcWallet = generateWallet(Currency.BTC, false);
 console.log(btcWallet);
 ```
-```cURL
+```REST API call
 curl --request GET \
   --url 'https://api-eu1.tatum.io/v3/bitcoin/wallet?mnemonic=SOME_STRING_VALUE' \
   --header 'x-api-key: REPLACE_KEY_VALUE'
@@ -44,9 +44,10 @@ curl --request GET \
 tatum-kms storemanagedwallet BTC --testnet
 ```
 </div>
+
 The response will contain the wallet's mnemonic and xpub.
 
-**Response example**
+**Response:**
 
 ```json
 {
@@ -57,19 +58,19 @@ The response will contain the wallet's mnemonic and xpub.
 
 ---
 
-# Create virtual accounts
+## Create virtual accounts
 
 Now, you can generate BTC virtual accounts connected to the xpub of the wallet you have just generated. You can generate as many virtual accounts as you want, but they must all be connected to the same xpub in order to function properly.
 
-<!-- theme:info -->
+<div class="toolbar-note">
+The reason virtual accounts for UTXO blockchains must be generated from the same xpub, is that UTXO blockchains are capable of performing multiple transactions at once. If the virtual accounts were generated from different xpubs, it would be impossible to keep track of which assets were being sent from which wallet.
+</div>
 
->The reason virtual accounts for UTXO blockchains must be generated from the same xpub, is that UTXO blockchains are capable of performing multiple transactions at once. If the virtual accounts were generated from different xpubs, it would be impossible to keep track of which assets were being sent from which wallet.
-
-Use the following API endpoint to [generate BTC virtual accounts](https://tatum.io/apidoc.php#operation/createAccount). In the "xpub" field, enter the xpub of the wallet you generated in the previous step.
+Use the following API endpoint to [generate BTC virtual accounts](https://developer.tatum.io/rest/virtual-accounts/create-new-account). In the "xpub" field, enter the xpub of the wallet you generated in the previous step.
 
 **Request example**
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 import { Account, Currency, CreateAccount, createAccount } from "@tatumio/tatum";
 import { config } from "dotenv";
 config();
@@ -83,7 +84,7 @@ const createNewAccount = async () => {
 };
 createNewAccount();
 ```
-```cURL
+```REST API call
 curl --request POST \
   --url https://api-eu1.tatum.io/v3/ledger/account \
   --header 'content-type: application/json' \
@@ -104,7 +105,8 @@ curl --request POST \
       }'
 ```
 </div>
-**Response example**
+
+**Response:**
 
 ```json
 {
@@ -120,11 +122,11 @@ curl --request POST \
 
 ---
 
-# Create deposit addresses
+## Create deposit addresses
 
 Finally, we create deposit addresses for each virtual account. Again, these deposit addresses MUST be generated from the xpub of the wallet we generated in the first step. If they are not generated from the same xpub, they will not function properly.
 
-Use the following API endpoint to [generate deposit addresses for each virtual account](https://tatum.io/apidoc.php#operation/generateDepositAddress):
+Use the following API endpoint to [generate deposit addresses for each virtual account](https://developer.tatum.io/rest/virtual-accounts/create-new-deposit-address):
 
 **Request example**
 <div class='tabbed-code-blocks'>
@@ -156,12 +158,13 @@ curl --request POST \
 }
 ```
 
-<!-- theme: warning -->
->If you want to generate virtual accounts from different xpubs, you won't be able to perform instant transactions between them. Only virtual accounts generated from the same xpub will be able to perform transactions between one another.
+<div class="toolbar-note">
+If you want to generate virtual accounts from different xpubs, you won't be able to perform instant transactions between them. Only virtual accounts generated from the same xpub will be able to perform transactions between one another.
+</div>
 
 ---
 
-# And that's it! 
+## And that's it! 
 
 Now your virtual accounts should work perfectly and your users can send feeless, instant transactions to each other.
 
