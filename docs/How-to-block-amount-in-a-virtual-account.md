@@ -1,179 +1,358 @@
-# How to connect a custom ERC-20 token to a virtual account
+# How to block amounts in a virtual account
 
 ---
 
-Tatum Virtual Accounts can support ERC-20 tokens whether they are existing or not out-of-the-box. To support your own ERC-20 token and utilize all the off-chain features, you must create your own virtual currency inside a virtual account. When you produce your own virtual currency, you can create accounts and send virtual account and blockchain transactions.
+Most blockchains do not allow the blocking or freezing of assets at blockchain addresses. But in real life, many applications must block blockchain assets before the actual transaction. It is the same as with a debit card and a real bank account. First, funds are blocked, and then the transaction is processed a couple of days later.
+
+When you work with Tatum Virtual Accounts, there are two types of balances:
+- **account balance** - a sum of all funds that are present in the account
+- **available balance** - a sum of all funds that are available for spending
+
+<div class="toolbar-note">
+The available balance can even be negative when there are blockages in the account. When the balance is below zero, transactions cannot be performed, but new blockages can be made.
+</div>
+
+Blockages affect the available balance of the account. Every new blockage has its unique identifier and details, like its type or custom description.
 
 ---
 
-<!-- theme: info -->
+## Blocking funds in a virtual account
 
-> A virtual currency is an entity in the virtual account distributed database. It is created with an initial supply of coins. This supply can be extended or reduced at any time.
+[To block funds in an account](https://developer.tatum.io/rest/virtual-accounts/block-an-amount-in-an-account), the account ID, amount, and type are required parameters. 
 
-Every virtual currency inside virtual accounts is pegged to a certain currency from the outside world - a blockchain asset or fiat currency. This means that one unit of the virtual currency is equal to some amount of the pegged currency.
 
-<!-- theme: info -->
-
->When you create a virtual currency <i>MY_OWN_TOKEN</i> with the base pair <i>USD</i>, you can set your custom base rate. For instance, base rate 2 means that 1 MY_OWN_TOKEN = 2 USD.
-
-When you want to connect a custom ERC-20 token to virtual accounts and utilize off-chain features, there are two scenarios:
-- Connecting an existing ERC-20 token to Tatum.
-- Creating your own ERC-20 token and connecting it to Tatum.
-
----
-## Connecting an existing ERC-20 token
-
-If you want to support an existing ERC-20 token, you only need to create a virtual currency representing the ERC-20 token inside virtual accounts. You need to enter the symbol of the existing ERC-20 (`symbol`); supply which will be credited to the virtual account inside Tatum (`supply`); a base pair (`basePair`); and the blockchain address where the initial supply was transferred (`address`). Let's use the [Tatum Test Token](https://ropsten.etherscan.io/token/0xb3858430b7ed404747b9561027d2c01a72610f43), an ERC-20 token issued for testing purposes by Tatum.
-
-```request
-curl --request POST \
-  --url https://api-eu1.tatum.io/v4/token/ETH/erc20/deploy \
-  --header 'Content-Type: application/json' \
-  --header 'x-api-key: ' \
-  --header 'x-testnet-type: ' \
-  --data '{
-  "symbol": "ERC_SYMBOL",
-  "name": "My_ERC20",
-  "totalCap": "10000000",
-  "supply": "10000000",
-  "digits": 18,
-  "address": "0xa0Ca9FF38Bad06eBe64f0fDfF279cAE35129F5C6",
-  "fromPrivateKey": "0x05e150c73f1920ec14caa1e0b6aa09940899678051a78542840c2668ce5080c2",
-  "nonce": 0,
-  "fee": {
-    "gasLimit": "40000",
-    "gasPrice": "20"
+<div class='tabbed-code-blocks'>
+```SDK
+import {blockAmount} from '@tatumio/tatum';
+/**
+ * Blocks an amount in an account.
+ * Any number of distinct amounts can be blocked in one account.
+ * @param id - ledger account ID
+ * @param body - request body with blocked amount - https://tatum.io/apidoc.php#operation/blockAmount
+ */
+const body = {
+  "amount": "5",
+  "type": "DEBIT_CARD_OP",
+  "description": "Card payment in the shop."
   }
-}'
+const txId = blockAmount("5fbaca3001421166273b3779", body);
 ```
-```response
-{
-  "txId": "c83f8818db43d9ba4accfe454aa44fc33123d47a4f89d47b314d6748eb0e9bc9",
-  "failed": false
-}
+```REST API call
+curl --location --request POST 'https://api-eu1.tatum.io/v3/ledger/account/block/5fbaca3001421166273b3779' \
+--header 'x-api-key: YOUR_API_KEY' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "amount": "5",
+    "type": "DEBIT_CARD_OP",
+    "description": "Card payment in the shop."
+}'
 ```
 </div>
 
-The response includes the virtual `txId` with the account balance of the supply at the blockchain address. The account is frozen unless the virtual currency is connected to a specific ERC-20 on the blockchain.
+The response is the identifier of the blockage.
 
-To unfreeze the account and connect the virtual currency to a blockchain ERC-20 token, you need to provide account ID (`id`) of the virtual currency as seen in the request below.
+```Response
+{
+    "id": "5fbe2b9b99166cb792cba6f2"
+}
+```
 
-**Request example**
+---
+
+## Getting an account's details
+
+You can now [get details about the account](https://developer.tatum.io/rest/virtual-accounts/get-account-by-id) where we made the blockage to see what has happened with the balance.
+
+<div class='tabbed-code-blocks'>
+```SDK
+import {getAccountById} from '@tatumio/tatum';
+/**
+ * Gets active account by ID.
+ * Displays all information regarding the given account - https://tatum.io/apidoc.php#operation/getAccountByAccountId
+ * @param id - ledger account ID
+ */
+const account = getAccountById("5fbaca3001421166273b3779");
+```
 ```json
-curl --request PUT \
-  --url https://api-eu1.tatum.io/v4/tatum/account/id/unfreeze \
-  --header 'Content-Type: application/json' \
-  --header 'x-api-key: '
-```
-
-If the request is processed successfully, the response is empty. Internally, the account created in the previous step [is unfrozen](../virtualAccounts/b3A6MzEwNDI1NDk-unfreeze-account) and automatic synchronization of incoming transactions for connected accounts and addresses is started. It is also possible to create a virtual account of your virtual currency and utilize all the instant feeless virtual account transactions.
-
----
-## Creating and connecting a new ERC-20 token
-
-In this step, you will create a new ERC-20 on the blockchain, create a virtual currency in virtual accounts, and connect this virtual currency to the instance of the ERC-20 token. This can be done using two API calls. In the first call, you both [deploy your ERC-20 token](../virtualAccounts/b3A6MzA5MTQyMTI-create-new-virtual-currency) and create the virtual account currency.
-
-<!-- theme: warning -->
-> #### Security
->
-> Blockchain transactions are signed using a private key via API, which is not a secure way of signing transactions. Your private keys and mnemonics should never leave your security perimeter. To correctly and securely sign a transaction, you can use the [Tatum CLI](https://github.com/tatumio/tatum-cli); a specific language library like [Tatum JS](https://github.com/tatumio/tatum-js); local [middleware API](https://github.com/tatumio/tatum-middleware); or our complex key management system, [Tatum KMS](https://github.com/tatumio/tatum-kms).
-
-
-<div class='tabbed-code-blocks'>
-```Request
-curl --request POST \
-  --url https://api-eu1.tatum.io/v4/tatum/token \
-  --header 'Content-Type: application/json' \
-  --header 'x-api-key: ' \
-  --data '{
-  "name": "VC_VIRTUAL",
-  "supply": "1000000",
-  "basePair": "AED",
-  "baseRate": 1,
-  "customer": {
-    "accountingCurrency": "USD",
-    "customerCountry": "US",
-    "externalId": "123654",
-    "providerCountry": "US"
-  },
-  "description": "My Virtual Token description.",
-  "accountCode": "AC_1011_B",
-  "accountNumber": "1234567890",
-  "accountingCurrency": "AED"
-}'
-```
-```Response
-{
-  "id": "5e68c66581f2ee32bc354087",
-  "balance": {
-    "accountBalance": "1000000",
-    "availableBalance": "1000000"
-  },
-  "currency": "BTC",
-  "frozen": true,
-  "active": false,
-  "customerId": "5e68c66581f2ee32bc354087",
-  "accountCode": "03_ACC_01",
-  "xpub": "xpub6FB4LJzdKNkkpsjggFAGS2p34G48pqjtmSktmK2Ke3k1LKqm9ULsg8bGfDakYUrdhe2EHw5uGKX9DrMbrgYnVfDwrksT4ZVQ3vmgEruo3Ka"
-}
+curl --location --request GET 'https://api-eu1.tatum.io/v3/ledger/account/5fbaca3001421166273b3779' \
+--header 'x-api-key: YOUR_API_KEY'
 ```
 </div>
 
-The response includes the `id` of the virtual account, with `accountBalance` being the supply at the blockchain address. The account is frozen (`"frozen": true`) unless the virtual currency is connected to a specific ERC-20 on the blockchain.
 
-The second property is the `transaction ID` of the blockchain transaction that created the ERC-20 token. To obtain the contract address, you need to [get the details of the transaction](https://dxh.stoplight.io/docs/blockchain/b3A6MjgzNjM1MTY-get-transaction-by-hash-or-address). You can see the property `contractAddress`, which is the address of the ERC-20 token.
+The response will contain the details of the virtual account associated with the specified account ID.
+
+**Response:**
+```json
+{
+    "currency": "BTC",
+    "active": true,
+    "balance": {
+        "accountBalance": "0.000001",
+        "availableBalance": "-4.999999"
+    },
+    "accountCode": null,
+    "accountNumber": null,
+    "frozen": false,
+    "xpub": "tpubDF1sYuDKCJr6mGietaVzqGmF2dqdKVBa1DtLJGBX8HXhtHZPv5UBz3WNWU22tiVAYSjqfvfFxMnDs3vM11iQrKej6dq33UCevhiPW9EQAS2",
+    "accountingCurrency": "EUR",
+    "id": "5fbaca3001421166273b3779"
+}
+```
+
+---
+
+## Getting all blockages in the account
+
+As you can see, there were 5 bitcoins blocked in the account, so the available balance is negative. Now you can [get all blockages in the specific account](https://developer.tatum.io/rest/virtual-accounts/get-blocked-amounts-in-an-account).
+
 
 <div class='tabbed-code-blocks'>
-```Request
-curl --request GET \
-  --url https://api-eu1.tatum.io/v4/blockchain/chainId/transaction/id \
-  --header 'Content-Type: application/json' \
-  --header 'env: ' \
-  --header 'x-api-key: '
+```SDK
+import { getBlockedAmountsByAccountId  } from '@tatumio/tatum';
+/**
+ * Gets blocked amounts for an account.
+ * @param id - account ID
+ * @param pageSize - max number of items per page is 50
+ * @param offset - optional Offset to obtain next page of the data
+ * @returns - detail of blocked amounts - https://tatum.io/apidoc.php#operation/getBlockAmount
+ */
+ 
+const amounts = getBlockedAmountsByAccountId("5fbaca3001421166273b3779?pageSize=50");
 ```
-```Response
+```REST API call
+curl --location --request GET 'https://api-eu1.tatum.io/v3/ledger/account/block/5fbaca3001421166273b3779?pageSize=50' \
+--header 'x-api-key: YOUR_API_KEY'
+```
+</div>
+
+The response will contain a list of all current blockages for the account ID.
+
+
+**Response:**
+```json
 [
-  {
-    "block": {
-      "hash": "000ca231a439a5c0a86a5a5dd6dc1918a8",
-      "height": 500124
-    },
-    "hash": 1,
-    "index": "d1c75a84e4bdf0dd9bf1bcd0ce4fb25f89e2ed3c5e9574dbca2760b52c428717",
-    "fee": {
-      "price": 50,
-      "limit": 50000,
-      "currency": "CELO"
-    },
-    "addressFrom": "2MsM67NLa71fHvTUBqNENW15P68nHB2vVXb",
-    "addressTo": "2MsM67NLa71fHvTUBqNENW15P68nHB2vVXb",
-    "token": {
-      "contractAddress": "2MsM67NLa71fHvTUBqNENW15P68nHB2vVXb",
-      "currencySymbol": "BTC",
-      "amount": 0
-    },
-    "status": "true",
-    "timestamp": "2021-21-10 07:36:05"
-  }
+    {
+        "amount": "5",
+        "type": "DEBIT_CARD_OP",
+        "description": "Card payment in the shop.",
+        "accountId": "5fbaca3001421166273b3779",
+        "id": "5fbe2b9b99166cb792cba6f2"
+    }
 ]
 ```
-</div>
 
+When you want to unblock an amount from the account, you have several options:
+- **unblock a specific blockage** - this will unblock the whole amount, and the account's available balance will be increased.
+- **unblock a blockage and perform a virtual account transaction** - this will unblock the amount from the account and perform a transaction to a different account.
+- **unblock all blocked amounts in the account** - this will unblock all blockages in the account.
 
-To unfreeze the account and connect the virtual currency to a blockchain ERC-20 token, you need to [provide the address of the ERC-20 token](https://tatum.io/apidoc.php#operation/storeTokenAddress) and the name of the virtual currency as seen in the request below.
+---
+
+## Unblocking an amount in the account
+
+Let's [unblock a blockage without a transaction](https://developer.tatum.io/rest/virtual-accounts/unblock-a-blocked-amount-in-an-account). You'll need to pass the ID of the specific blockage you want to unblock.
 
 <div class='tabbed-code-blocks'>
-```request
-curl --location --request POST 'https://api-eu1.tatum.io/v3/offchain/token/TestToken/0x5a14C4ebc2e20eEB820C5197fc408a3CB9E27B75' \
---header 'x-api-key: YOUR_API_KEY '
+```SDK
+import {deleteBlockedAmount} from '@tatumio/tatum';
+/**
+ * Unblocks a previously blocked amount in an account.
+ * Increases the available balance in the account where the amount was blocked.
+ * @param id - transaction ID of blocked amount
+ */
+const account = deleteBlockedAmount ("5fbe2b9b99166cb792cba6f2");
 ```
-```response
-curl --request PUT \
-  --url https://api-eu1.tatum.io/v4/tatum/account/id/unfreeze \
-  --header 'Content-Type: application/json' \
-  --header 'x-api-key: '
+```json
+curl --location --request DELETE 'https://api-eu1.tatum.io/v3/ledger/account/block/5fbe2b9b99166cb792cba6f2' \
+--header 'x-api-key: YOUR_API_KEY'
 ```
 </div>
 
+There will be an empty response if the request is successful. Now, when you check the details of the account, you will see the **availableBalance** is the same as the **accountBalance**.
 
-If the request is processed successfully, the response is empty. Internally, the account created in the previous step [is unfrozen](../virtualAccounts/b3A6MzEwNDI1NDk-unfreeze-account) and automatic synchronization of incoming transactions for connected accounts and addresses is started. It is also possible to create a virtual account of your virtual currency and utilize all the instant feeless virtual account transactions.
+<div class='tabbed-code-blocks'>
+```SDK
+import {getAccountById} from '@tatumio/tatum';
+/**
+ * Gets active account by ID.
+ * Displays all information regarding the given account - https://tatum.io/apidoc.php#operation/getAccountByAccountId
+ * @param id - ledger account ID
+ */
+const account = getAccountById("5fbaca3001421166273b3779");
+```
+```REST API call
+curl --location --request GET 'https://api-eu1.tatum.io/v3/ledger/account/5fbaca3001421166273b3779' \
+--header 'x-api-key: YOUR_API_KEY'
+```
+```Response
+{
+    "currency": "BTC",
+    "active": true,
+    "balance": {
+        "accountBalance": "0.000001",
+        "availableBalance": "0.000001"
+    },
+    "accountCode": null,
+    "accountNumber": null,
+    "frozen": false,
+    "xpub": "tpubDF1sYuDKCJr6mGietaVzqGmF2dqdKVBa1DtLJGBX8HXhtHZPv5UBz3WNWU22tiVAYSjqfvfFxMnDs3vM11iQrKej6dq33UCevhiPW9EQAS2",
+    "accountingCurrency": "EUR",
+    "id": "5fbaca3001421166273b3779"
+}
+```
+</div>
+
+You can test other unblocking methods or read more about the specific endpoints in the [API Reference](https://developer.tatum.io/rest/virtual-accounts/ block-an-amount-in-an-account). 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
