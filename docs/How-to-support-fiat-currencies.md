@@ -8,6 +8,8 @@ A fiat currency is a government-issued currency that isn't backed by a commodity
 
 In addition to crypto accounts, virtual accounts also support private virtual currencies. A virtual currency does not have to be connected to the blockchain. It can live within the virtual accounts alone. When you create your own virtual currency, you can then create accounts and send virtual account transactions.
 
+[How to automatically scan blockchain addresses and set up webhook notifications](url)
+
 <div class="toolbar-note">
 A virtual currency is an entity in the virtual account distributed database. It is created with an initial supply of coins. This supply can be extended or reduced at any time.
 </div>
@@ -273,3 +275,5 @@ The typical flow is as follows:
 For more information on how to support virtual accounts and currencies in a crypto exchange, please refer to the following workshop:
 
 https://www.youtube.com/watch?v=CGgyyTTv0yw&t=209s&ab_channel=Tatum
+
+[How to send a feeless instant transaction](url)
