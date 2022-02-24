@@ -16,10 +16,10 @@ In this guide, you will learn how to set up virtual accounts to work with the ac
 - Binance Smart Chain (BSC)
 - XinFin (XDC)
 
-<!-- theme: info-->
->With other types of blockchains supported in Tatum, you must associate virtual accounts with addresses generated from a single wallet with the same extended public key (xpub) in order for them to work properly. 
->
->However, with the account-based blockchains we will be working with in this guide, you can associate virtual accounts with deposit addresses generated from different wallets with different xpubs. 
+<div class="toolbar-note">
+With other types of blockchains supported in Tatum, you must associate virtual accounts with addresses generated from a single wallet with the same extended public key (xpub) in order for them to work properly. 
+However, with the account-based blockchains we will be working with in this guide, you can associate virtual accounts with deposit addresses generated from different wallets with different xpubs. 
+</div>
 
 This guide will be divided into two main sections:
 
@@ -28,26 +28,32 @@ This guide will be divided into two main sections:
 
 ---
 
-# Creating and connecting virtual accounts with blockchain addresses
+## Creating and connecting virtual accounts with blockchain addresses
 
 First, we will show you how to generate a wallet and create virtual accounts and blockchain addresses from the wallet's xpub. Alternatively, you can associate existing blockchain addresses with the virtual accounts you create. In this case, you can skip the "**Generate a wallet**" and "**Create deposit addresses**" steps below.
 
-<!-- theme: info-->
->The code snippets in this guide feature API endpoints for the Polygon blockchain, but the same process applies to all of the other blockchains listed above.
+<div class="toolbar-note">
+The code snippets in this guide feature API endpoints for the Polygon blockchain, but the same process applies to all of the other blockchains listed above.
+
+### Generate a wallet
+
+If you want to create new deposit addresses for virtual accounts, you must [generate a wallet on Polygon](https://developer.tatum.io/rest/blockchain/generate-polygon-wallet).
+
+<div class="toolbar-note">
+If you want to connect existing deposit addresses to virtual accounts, you can skip this step and the "**Create deposit addresses**" step and instead "**Connect virtual accounts to existing blockchain addresses**" using the instructions below.
+</div>
 
 Use the following API endpoint to generate a wallet on Polygon:
 
-**Request example**
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 // You need to install the Javascript library
 // https://github.com/tatumio/tatum-js
 const {generateWallet, Currency} = require("@tatumio/tatum");
-
 const maticWallet = generateWallet(Currency.MATIC, false);
 console.log(maticWallet);
 ```
-```cURL
+```REST API call
 curl --request GET \
   --url 'https://api-eu1.tatum.io/v3/polygon/wallet?mnemonic=SOME_STRING_VALUE' \
   --header 'x-api-key: REPLACE_KEY_VALUE'
@@ -58,7 +64,7 @@ tatum-kms storemanagedwallet MATIC --testnet
 </div>
 The response will be the wallet's xpub and mnemonic.
 
-**Response example**
+**Response:**
 ```json
 {
   "mnemonic": "urge pulp usage sister evidence arrest palm math please chief egg abuse",
@@ -68,11 +74,10 @@ The response will be the wallet's xpub and mnemonic.
 
 ## Create virtual accounts
 
-Next, you can [create virtual accounts](https://tatum.io/apidoc.php#operation/createAccount) from the xpub of the wallet.
+Next, you can [create virtual accounts](https://developer.tatum.io/rest/virtual-accounts/create-new-account) from the xpub of the wallet.
 
-**Request example**
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 import { Account, Currency, CreateAccount, createAccount } from "@tatumio/tatum";
 import { config } from "dotenv";
 config();
@@ -86,7 +91,7 @@ const createNewAccount = async () => {
 };
 createNewAccount();
 ```
-```cURL
+```REST API call
 curl --request POST \
   --url https://api-eu1.tatum.io/v3/ledger/account \
   --header 'content-type: application/json' \
@@ -99,7 +104,7 @@ curl --request POST \
 </div>
 The response will contain details about your newly created account, including the account `id`, which is be used to identify the account within Tatum.
 
-**Response example**
+**Response:**
 
 ```json
 {
@@ -117,33 +122,30 @@ The response will contain details about your newly created account, including th
 
 ## Create blockchain addresses
 
-Now, you can [create blockchain addresses](https://tatum.io/apidoc.php#operation/generateDepositAddress) for each virtual account.
+Now, you can [create blockchain addresses](https://developer.tatum.io/rest/virtual-accounts/create-new-deposit-address) for each virtual account.
 
-**Request example**
-
-```JavaScript
+<div class='tabbed-code-blocks'>
+```SDK
 import { generateDepositAddress, Address } from "@tatumio/tatum";
 import { config } from "dotenv";
-
 config();
-
 const createNewAddress = async () => {
     const id = account.id;
     const address: Address = await generateDepositAddress(id);
     console.log(address);
 };
-
 createNewAddress();
 ```
-```cURL
+```REST API call 
 curl --request POST \
   --url 'https://api-eu1.tatum.io/v3/offchain/account/{id}/address' \
   --header 'x-api-key: REPLACE_KEY_VALUE'
 ```
+</div>
 
 The response will contain the blockchain address you have just generated.
 
-**Response example**
+**Response:**
 
 ```json
 {
@@ -156,11 +158,10 @@ The response will contain the blockchain address you have just generated.
 
 ## Connect virtual accounts to existing blockchain addresses
 
-Alternatively, you can connect the virtual accounts you created above to existing blockchain addresses. To do so, use the [assign address to account](https://tatum.io/apidoc.php#operation/assignAddress) endpoint, and enter the account ID of a virtual account and the blockchain address you'd like to connect it to:
+Alternatively, you can connect the virtual accounts you created above to existing blockchain addresses. To do so, use the [assign address to account](https://developer.tatum.io/rest/virtual-accounts/assign-address-for-account) endpoint, and enter the account ID of a virtual account and the blockchain address you'd like to connect it to:
 
-**Request example**
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 import { assignDepositAddress, Address } from "@tatumio/tatum";
 import { config } from "dotenv";
 config();
@@ -171,7 +172,7 @@ const assignAddress = async (address) => {
 };
 assignAddress();
 ```
-```cURL
+```REST API call
 curl --request POST \
   --url 'https://api-eu1.tatum.io/v3/offchain/account/{id}/address/{address}' \
   --header 'x-api-key: REPLACE_KEY_VALUE'
@@ -179,7 +180,7 @@ curl --request POST \
 </div>
 The response will contain the address that has been assigned to the virtual account.
 
-**Response example**
+**Response:**
 
 ```json
 {
@@ -187,8 +188,9 @@ The response will contain the address that has been assigned to the virtual acco
   currency: 'MATIC'
 }
 ```
+</div>
 ---
-# Two ways to work with virtual accounts in your application
+## Two ways to work with virtual accounts in your application
 
 There are two primary approaches for how to work with virtual accounts on account-based blockchains:
 
@@ -199,8 +201,9 @@ Each approach has its own benefits, and we will show you how to set both of them
 
 ## Use each blockchain address as both a deposit and withdrawal address
 
-<!-- theme: info-->
->This approach is the most cost-effective, but requires that you keep track of which funds are at which address associated with which private key. Thus, there is significantly more logistical work associated with this approach.
+<div class="toolbar-note">
+This approach is the most cost-effective, but requires that you keep track of which funds are at which address associated with which private key. Thus, there is significantly more logistical work associated with this approach.
+</div>
 
 In this approach, your users receive incoming transactions from external sources to the deposit addresses associated with each virtual account. The assets remain at these deposit addresses until they are withdrawn to another blockchain address.
 
@@ -219,33 +222,32 @@ However, you, as the application owner, must keep track of which private key is 
 
 ## Use a master address for withdrawals
 
-<!-- theme: info-->
-
->This approach incurs more blockchain fees, as each time a user receives assets to their deposit address, they are transferred to a master address which holds all funds to be withdrawn. 
->
->However, since there is only one address from which assets are withdrawn, you don't need to keep track of which address holds which assets, and the workflow is greatly simplified in comparison to the previous approach.
+<div class="toolbar-note">
+This approach incurs more blockchain fees, as each time a user receives assets to their deposit address, they are transferred to a master address which holds all funds to be withdrawn. 
+However, since there is only one address from which assets are withdrawn, you don't need to keep track of which address holds which assets, and the workflow is greatly simplified in comparison to the previous approach.
+</div>
 
 ### Create a master address for all withdrawals
 
-In this approach, you should create a deposit address on the blockchain to which you will send every incoming transaction received to every deposit address. Use the following API endpoint to [generate a deposit address on Polygon](https://tatum.io/apidoc.php#operation/PolygonGenerateAddress):
+In this approach, you should create a deposit address on the blockchain to which you will send every incoming transaction received to every deposit address. Use the following API endpoint to [generate a deposit address on Polygon](https://developer.tatum.io/rest/blockchain/generate-polygon-account-address-from-extended-public-key):
 
-**Request example**
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 const {generateAddressFromXPub, generateWallet, Currency} = require("@tatumio/tatum");
 const wallet = generateWallet(Currency.MATIC, false);
 const maticWallet = generateAddressFromXPub(Currency.MATIC, false, wallet.xpub, 0);
 console.log(maticWallet);
 ```
-```cURL
+```REST API call
 curl --request GET \
   --url https://api-eu1.tatum.io/v3/polygon/address/{xpub}/{index} \
   --header 'x-api-key: REPLACE_KEY_VALUE'
 ```
 </div>
+
 The response will contain the address you have just generated.
 
-**Response example**
+**Response:**
 
 ```json
 {
