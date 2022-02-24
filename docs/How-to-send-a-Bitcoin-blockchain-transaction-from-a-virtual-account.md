@@ -1,7 +1,5 @@
 # How to send a Bitcoin blockchain transaction from a virtual account
 
----
-
 When you work with Tatum Virtual Accounts, you can perform instant transactions between virtual accounts which are not written to the underlying blockchain. But every once and a while, you need to synchronize some of the transactions to the blockchain. In this case, you have to perform a virtual account-to-blockchain transaction. As a prerequisite, you must have a virtual account with credited blockchain transactions available. 
 
 This type of transaction consists of 3 steps:
