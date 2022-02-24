@@ -3,10 +3,12 @@
 ---
 This guide describes how to withdraw assets from virtual accounts connected to gas pump wallets. We will cover the whole flow of the user journey here - from gas pump wallet generation to virtual account creation to withdrawal from a gas pump wallet to a blockchain address with correct virtual account balance updates.
 
----
-## Wallet generation !THIS API CALL IS DEPRECATED!
+[How to pay fees for token transfers from another address]()
 
-The first step is to [create a gas pump wallet](https://tatum.io/apidoc.php#operation/GenerateCustodialWallet) for every user. You can choose which ERC-* standards you want to support in the wallet - native assets like ETH or BSC are supported by default. In this example, we will support the native currency (MATIC) on Polygon and any ERC-20 tokens running on the Polygon network.
+---
+## Wallet generation
+
+The first step is to [create a gas pump wallet](https://developer.tatum.io/rest/smart-contracts/generate-custodial-wallet-address) for every user. You can choose which ERC-* standards you want to support in the wallet - native assets like ETH or BSC are supported by default. In this example, we will support the native currency (MATIC) on Polygon and any ERC-20 tokens running on the Polygon network.
 
 <div class='tabbed-code-blocks'>
 ```Request
@@ -27,15 +29,17 @@ curl --location --request POST 'https://api-eu1.tatum.io/v3/blockchain/sc/custod
     "txId": "0x2979a3d30f812b0d9ebcc66d01b620d3779380c38e8770a82fa4ea4f2dfa8f69"
 }
 ```
-The response gives us a hash of the transaction. We can [obtain the contract address](https://tatum.io/apidoc.php#operation/SCGetContractAddress) - our gas pump address - from this hash.
+</div>
+
+The response gives us a hash of the transaction. We can [obtain the contract address](https://developer.tatum.io/rest/smart-contracts/get-contract-address-from-transaction) - our gas pump address - from this hash.
 
 ---
 ## Virtual account creation
 
-Now we need to [create virtual accounts](../virtualAccounts/b3A6MzA5MTQyMTI-create-new-virtual-currency). Since we have decided to support two currencies, MATIC and USDC, we need to create two virtual accounts for every user. These accounts do not have xpubs because we will manually assign the address to them later.
+Now we need to [create virtual accounts](https://developer.tatum.io/rest/virtual-accounts/create-new-account). Since we have decided to support two currencies, MATIC and USDC, we need to create two virtual accounts for every user. These accounts do not have xpubs because we will manually assign the address to them later.
 
 <div class='tabbed-code-blocks'>
-```request
+```Request
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/account \
   --header 'Content-Type: application/json' \
@@ -55,7 +59,7 @@ curl --request POST \
   "accountNumber": "123456"
 }'
 ```
-```response
+```Response
 {
   "id": "5e68c66581f2ee32bc354087",
   "balance": {
@@ -71,7 +75,8 @@ curl --request POST \
 }
 ```
 </div>
-Once an account has been created, we need to [assign the gas pump address](../virtualAccounts/b3A6MzEwNDI1NTU-asssign-address-to-account) to it. This process enables automatic incoming transaction synchronization for the specified address and currency.
+
+Once an account has been created, we need to [assign the gas pump address](https://developer.tatum.io/rest/virtual-accounts/assign-address-for-account) to it. This process enables automatic incoming transaction synchronization for the specified address and currency.
 
 <div class='tabbed-code-blocks'>
 ```Request
@@ -92,6 +97,7 @@ curl --request POST \
 }
 ```
 </div>
+
 The response contains a blockchain `address` that has been connected to a virtual account. Any incoming blockchain transaction to this address will be automatically detected and the account balance will be updated.
 
 ---
@@ -107,7 +113,7 @@ Let's withdraw 1 USDC from an account to the blockchain.
 
 #### Perform a withdrawal
 
-First you need to send a [request for withdrawal](../virtualAccounts/b3A6MjgwOTI1Njk-create-withdrawal) from the virtual account so that, after performing the blockchain operation, the virtual account would be synchronized.
+First you need to send a [request for withdrawal](https://developer.tatum.io/rest/virtual-accounts/store-withdrawal) from the virtual account so that, after performing the blockchain operation, the virtual account would be synchronized.
 
 <div class='tabbed-code-blocks'>
 ```Request
@@ -153,62 +159,40 @@ curl --request POST \
 }
 ```
 </div>
+
 The response contains a virtual account transaction `reference` and a withdrawal `id`. The account balance has been debited with 1 USDC and the transaction is visible in the transaction list of the virtual account. So far, nothing has been done on the blockchain.
 
 #### Perform a blockchain transaction
 
-Now it's time to [move the assets to another address](../virtualAccounts/b3A6MjgxMjcyNTM-blockchain-transfer). You don't have to send any MATIC there to pay for gas. You only need to specify which assets should be sent, how much, and where.
+Now it's time to [move the assets to another address](https://developer.tatum.io/rest/smart-contracts/transfer-assets-from-custodial-wallet). Since we're using gas pump wallets, you don't have to send any MATIC there to pay for gas. You only need to specify which assets should be sent, how much of them, and where to send them, and the funds required to pay for the transaction will automatically be deducted from the owner address you specified when creating the gas pump wallets.
 
-**Request example**
 <div class='tabbed-code-blocks'>
 ```Request
-curl --request POST \
-  --url https://api-eu1.tatum.io/v4/tatum/transaction/chainId \
-  --header 'Content-Type: application/json' \
-  --header 'x-api-key: ' \
-  --data '{
-  "sender": {
-    "keyPair": [
-      {
-        "address": "0x687422eEA2cB73B5d3e242bA5456b782919AFc85",
-        "privateKey": "0x05e150c73f1920ec14caa1e0b6aa09940899678051a78542840c2668ce5080c2",
-        "mnemonic": "urge pulp usage sister evidence arrest palm math please chief egg abuse"
-      }
-    ],
-    "signatureId": "26d3883e-4e17-48b3-a0ee-09a3e484ac83",
-    "accountId": "5e68c66581f2ee32bc354087"
-  },
-  "receiver": [
-    {
-      "address": "0x89205A3A3b2A69De6Dbf7f0",
-      "token": {
-        "address": "2MsM67NLa71fHvTUBqNENW15P68nHB2vVXb",
-        "symbol": "LINK",
-        "amount": "5"
-      }
-    }
-  ],
-  "paymentId": "9625",
-  "note": "Hello there",
-  "compliant": false,
-  "fee": {
-    "price": 50,
-    "limit": 50000,
-    "currency": "CELO"
-  }
+curl --location --request POST 'https://api-eu1.tatum.io/v3/blockchain/sc/custodial/transfer' \
+--header 'Content-Type: application/json' \
+--header 'x-api-key: YOUR_API_KEY' \
+--data-raw '{
+    "chain": "MATIC",
+    "contractType": 0,
+    "amount": "1",
+    "tokenAddress": "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+    "custodialAddress": "0x8Fca331d13E518059191Dde43765ea77C6C98336",
+    "recipient": "0x42952e30fB119e0683607Ef6D5A7E8A97dBB7314",
+    "fromPrivateKey": "0x37b091fc4ce46a56da643f021254612551dbe0944679a6e09cb5724d3085c9ab"
 }'
 ```
+</div>
+
+The response is the transaction hash. As you can see, we have to enter the address of the token we want to transfer (tokenAddress [0x2791bca1f2de4661ed88a30c99a7a9449aa84174](https://polygonscan.com/token/0x2791bca1f2de4661ed88a30c99a7a9449aa84174)). The contractType attribute is very important,  as it tells the wallet which kind of a token it is transferring - 0 for ERC-20 assets. For more on using gas pump wallets, please refer to our [full guide]().
+
 ```Response
 {
-  "reference": "0c64cc04-5412-4e57-a51c-ee5727939bcb"
+    "txId": "0xa1bdc0008b6cce138cec38336a3cbbf1117cc56bcfe0004e14d6789a9d099b72"
 }
 ```
-</div>
-The response contains a `reference` property which represents a unique identifier within the Tatum ledger. In case of a failure, use this value to search for problems.
+
 #### Complete or cancel the withdrawal
 
-Once the transaction is successful, you need to [mark the withdrawal as completed](../virtualAccounts/b3A6MjgwOTI1NzE-complete-withdrawal). If the transaction fails and you want to refund the assets to the virtual account, you need to [cancel the original withdrawal request](../virtualAccounts/b3A6MjgwOTI1NzI-cancel-withdrawal).
+Once the transaction is successful, you need to [mark the withdrawal as completed](https://developer.tatum.io/rest/virtual-accounts/complete-withdrawal). If the transaction fails and you want to refund the assets to the virtual account, you need to [cancel the original withdrawal request](https://developer.tatum.io/rest/virtual-accounts/cancel-withdrawal).
 
----
-
-These five simple steps are all you need to do to connect your gas pump wallets to virtual accounts and keep them synced.
+That's it. 5 simple steps to connect your gas pump wallets to virtual accounts and keep them synced.
