@@ -173,5 +173,7 @@ curl --request PUT \
   --header 'Content-Type: application/json' \
   --header 'x-api-key: '
 ```
+</div>
+
 
 If the request is processed successfully, the response is empty. Internally, the account created in the previous step [is unfrozen](../virtualAccounts/b3A6MzEwNDI1NDk-unfreeze-account) and automatic synchronization of incoming transactions for connected accounts and addresses is started. It is also possible to create a virtual account of your virtual currency and utilize all the instant feeless virtual account transactions.

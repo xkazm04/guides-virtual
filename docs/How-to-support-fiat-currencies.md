@@ -1,30 +1,31 @@
 # How to support fiat currencies
 
 ---
-<!-- theme: info -->
 
->A fiat currency is a government-issued currency that isn't backed by a commodity such as gold.
+<div class="toolbar-note">
+A fiat currency is a government-issued currency that isn't backed by a commodity such as gold.
+</div>
 
 In addition to crypto accounts, virtual accounts also support private virtual currencies. A virtual currency does not have to be connected to the blockchain. It can live within the virtual accounts alone. When you create your own virtual currency, you can then create accounts and send virtual account transactions.
 
-<!-- theme: info -->
-
->A virtual currency is an entity in the virtual account distributed database. It is created with an initial supply of coins. This supply can be extended or reduced at any time.
+<div class="toolbar-note">
+A virtual currency is an entity in the virtual account distributed database. It is created with an initial supply of coins. This supply can be extended or reduced at any time.
+</div>
 
 Every virtual currency inside virtual accounts is pegged to a certain currency from the outside world - a blockchain asset or fiat currency. This means that one unit of the virtual currency is equal to some amount of the pegged currency.
 
-<!-- theme: info -->
-
->When you create a virtual currency <i>VC_USD</i> with the base pair <i>USD</i>, you can set your custom base rate. For instance, base rate 2 means that 1 VC_USD = 2 USD.
+<div class="toolbar-note">
+When you create a virtual currency <i>VC_USD</i> with the base pair <i>USD</i>, you can set your custom base rate. For instance, base rate 2 means that 1 VC_USD = 2 USD.
+</div>
 
 ---
 ## Creating a virtual currency
 
-To support fiat currencies, you can [create your own virtual currency](../virtualAccounts/b3A6MzA5MTQyMTI-create-new-virtual-currency) with the base pair as the currency you want to support.
+To support fiat currencies, you can [create your own virtual currency](https://developer.tatum.io/rest/virtual-accounts/create-new-virtual-currency) with the base pair as the currency you want to support.
 
-**Request example**
+
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 import {Currency, Fiat, createVirtualCurrency } from '@tatumio/tatum';
 /**
  * Create new virtual currency with given supply stored in account.
@@ -39,7 +40,7 @@ const body = {
   }
 const vc = createVirtualCurrency (body);
 ```
-```cURL
+```REST API call
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/token \
   --header 'Content-Type: application/json' \
@@ -77,6 +78,7 @@ curl --request POST \
 }
 ```
 </div>
+
 The result of the call is a virtual account of the given virtual currency. The initial supply of the virtual currency is already credited to the account.
 
 ---
@@ -84,11 +86,10 @@ The result of the call is a virtual account of the given virtual currency. The i
 ## Increasing the supply of a virtual currency
 
 
-When you want to [increase the supply of a virtual currency](../virtualAccounts/b3A6MzA5MTQyMTU-create-new-supply), you have to mint new units. Minted units are credited to a specific virtual account, and the operation is visible as a new virtual account transaction for that account.
+When you want to [increase the supply of a virtual currency](https://developer.tatum.io/rest/virtual-accounts/create-new-supply-of-virtual-currency), you have to mint new units. Minted units are credited to a specific virtual account, and the operation is visible as a new virtual account transaction for that account.
 
-**Request example**
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 import { mintVirtualCurrency } from '@tatumio/tatum';
 /**
  * Create new supply of virtual currency linked on the given accountId.
@@ -101,7 +102,7 @@ const body = {
   }
 const mint = mintVirtualCurrency (body);
 ```
-```cURL
+```REST API call
 curl --request PUT \
   --url https://api-eu1.tatum.io/v4/vc/token/mint \
   --header 'Content-Type: application/json' \
@@ -118,7 +119,8 @@ curl --request PUT \
 }'
 ```
 </div>
-**Response example**
+
+**Response:**
 <div class='tabbed-code-blocks'>
 ```json
 {
@@ -126,16 +128,17 @@ curl --request PUT \
 }
 ```
 </div>
+
 A `reference` to the virtual account transaction is given in the response.
 
 ---
 ## Destroying the supply of a virtual currency
 
-When you want to [decrease the supply of a virtual currency](../virtualAccounts/b3A6MzA5MTQyMTY-burn-supply), you have to revoke some units. The revoked units are debited from the virtual account they were first credited to, and the operation is visible as a new virtual account transaction for the account.
+When you want to [decrease the supply of a virtual currency](https://developer.tatum.io/rest/virtual-accounts/destroy-supply-of-virtual-currency), you have to revoke some units. The revoked units are debited from the virtual account they were first credited to, and the operation is visible as a new virtual account transaction for the account.
 
 **Request example**
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 import { revokeVirtualCurrency } from '@tatumio/tatum';
 /**
  * Destroy supply of virtual currency linked on the given accountId.
@@ -148,7 +151,7 @@ const body = {
   }
 const burn = revokeVirtualCurrency (body);
 ```
-```cURL
+```REST API call
 curl --request PUT \
   --url https://api-eu1.tatum.io/v4/vc/token/revoke \
   --header 'Content-Type: application/json' \
@@ -165,7 +168,8 @@ curl --request PUT \
 }'
 ```
 </div>
-**Response example**
+
+**Response:**
 ```json
 {
   "reference": "0c64cc04-5412-4e57-a51c-ee5727939bcb"
@@ -176,11 +180,10 @@ A `reference` to the virtual account transaction is given in the response.
 ---
 ## Listing account transactions
 
-When we get the [list of account transactions](../virtualAccounts/b3A6MjgwOTcwNDg-list-account-transactions) now, we can see two operations - mint and revoke.
+When we get the [list of account transactions](https://developer.tatum.io/rest/virtual-accounts/find-transactions-for-account) now, we can see two operations - mint and revoke.
 
-**Request example**
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 import {getTransactionsByAccount} from '@tatumio/tatum';
 /**
  * Finds transactions for the account identified by the given account ID.
@@ -193,7 +196,7 @@ const filter = {
   }
 const tx = getTransactionsByAccount(filter,50,0);
 ```
-```cURL
+```REST API call
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/transaction/account \
   --header 'Content-Type: application/json' \
@@ -225,9 +228,10 @@ curl --request POST \
 }'
 ```
 </div>
+
 In the response, we can see the two transactions we have just performed - **mint** and **revoke**.
 
-**Response example**
+**Response:**
 ```json
 [
   {
