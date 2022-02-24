@@ -3,28 +3,28 @@
 When you work with Tatum Virtual Accounts, you can perform instant transactions between virtual accounts which are not written to the underlying blockchain. But every once and a while, you need to synchronize some of the transactions to the blockchain. In this case, you have to perform a virtual account-to-blockchain transaction. As a prerequisite, you must have a virtual account with credited blockchain transactions available. 
 
 This type of transaction consists of 3 steps:
-- [Create a withdrawal transaction](../virtualAccounts/b3A6MjgwOTI1Njk-create-withdrawal) - this will perform a virtual account transaction from the source account. It will debit the amount from the source account.
-- [Perform a blockchain transaction](../virtualAccounts/b3A6MjgxMjcyNTM-blockchain-transfer) - in this step, the crypto assets are sent to the recipient's address. Any blockchain address from your blockchain wallet can be used as the source address of the blockchain transaction.
-- [Complete the withdrawal transaction](../virtualAccounts/b3A6MjgwOTI1NzE-complete-withdrawal) - mark the withdrawal as successful and store the transaction ID of the blockchain transaction to the withdrawal operation. This step must be completed; otherwise, there will be inconsistencies within the virtual account state. If the blockchain transaction fails, the [withdrawal request must be canceled](../virtualAccounts/b3A6MjgwOTI1NzI-cancel-withdrawal), and the funds will be credited to the originating virtual account.
+- [Create a withdrawal transaction](https://developer.tatum.io/rest/virtual-accounts/store-withdrawal) - this will perform a virtual account transaction from the source account. It will debit the amount from the source account.
+- [Perform a blockchain transaction](https://developer.tatum.io/rest/blockchain/send-bitcoin-to-blockchain-addresses) - in this step, the crypto assets are sent to the recipient's address. Any blockchain address from your blockchain wallet can be used as the source address of the blockchain transaction.
+- [Complete the withdrawal transaction](https://developer.tatum.io/rest/virtual-accounts/complete-withdrawal) - mark the withdrawal as successful and store the transaction ID of the blockchain transaction to the withdrawal operation. This step must be completed; otherwise, there will be inconsistencies within the virtual account state. If the blockchain transaction fails, the [withdrawal request must be canceled](../virtualAccounts/b3A6MjgwOTI1NzI-cancel-withdrawal), and the funds will be credited to the originating virtual account.
 
-All of these actions can be performed as [one API call](../virtualAccounts/b3A6MjgwOTI1NzI-cancel-withdrawal) for a specific blockchain. The following example uses Bitcoin but the process is applicable for other blockchains as well.
+All of these actions can be performed as [one API call](https://developer.tatum.io/rest/virtual-accounts/cancel-withdrawal) for a specific blockchain. The following example uses Bitcoin but the process is applicable for other blockchains as well.
 
-<!-- theme: warning -->
-> #### Security
->
-> In this guide, blockchain transactions are being signed using a private key via API.
-> This is fine for testing and demo purposes, but for production use, it is not a secure way of signing transactions. 
-> **Your private keys and mnemonics should never leave your security perimeter**. To correctly and securely sign a transaction, you can use [Tatum CLI](https://github.com/tatumio/tatum-cli); a specific language library like [Tatum JS](https://github.com/tatumio/tatum-js); the local [middleware API](https://github.com/tatumio/tatum-middleware); or our complex key management system, [Tatum KMS](https://github.com/tatumio/tatum-kms).
+<div class="toolbar-warning">
+#### Security
+In this guide, blockchain transactions are being signed using a private key via API.
+This is fine for testing and demo purposes, but for production use, it is not a secure way of signing transactions. 
+**Your private keys and mnemonics should never leave your security perimeter**. To correctly and securely sign a transaction, you can use [Tatum CLI](https://github.com/tatumio/tatum-cli); a specific language library like [Tatum JS](https://github.com/tatumio/tatum-js); the local [middleware API](https://github.com/tatumio/tatum-middleware); or our complex key management system, [Tatum KMS](https://github.com/tatumio/tatum-kms).
+</div>
 
 ---
 ## Sending Bitcoin from a virtual account to the blockchain
 
 
-This operation will [withdraw BTC from a virtual account to a blockchain address](https://tatum.io/apidoc.php#operation/BtcTransfer).
+This operation will [withdraw BTC from a virtual account to a blockchain address](https://developer.tatum.io/rest/virtual-accounts/send-bitcoin-from-tatum-account-to-address).
 
-**Request example**
+
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 import {sendBitcoinOffchainTransaction} from '@tatumio/tatum';
 /**
  * Send Bitcoin from Tatum account to address.
@@ -42,7 +42,7 @@ const body = {
   }
 const tx = sendBitcoinOffchainTransaction(false, body);
 ```
-```cURL
+```REST API call
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/transaction/BTC \
   --header 'Content-Type: application/json' \
@@ -81,7 +81,8 @@ curl --request POST \
 ```
 </div>
 
-**Response example**
+**Response:**
+
 <div class='tabbed-code-blocks'>
 ```json
 {
@@ -89,16 +90,17 @@ curl --request POST \
 }
 ```
 </div>
+
 We can see that the parameters `chainId`, `sender` and `receiver` are required in this call. The `reference` parameter in the response is a unique identifier within the Tatum ledger. In case of failure, use this value to search for problems.
 
 ---
 ## Getting virtual account transactions
 
-For a withdrawal, a [virtual account transaction](../virtualAccounts/b3A6MjgwOTcwNDg-list-account-transactions) will be created for the source virtual account. To look up the details of this withdrawal transaction, use the [find transactions for account](https://tatum.io/apidoc#operation/getTransactionsByAccountIdl) endpoint:
+For a withdrawal, a [virtual account transaction](../virtualAccounts/b3A6MjgwOTcwNDg-list-account-transactions) will be created for the source virtual account. To look up the details of this withdrawal transaction, use the [find transactions for account](https://developer.tatum.io/rest/virtual-accounts/find-transactions-for-account) endpoint:
 
-**Request example**
+
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 import {getTransactionsByAccount} from '@tatumio/tatum';
 /**
  * Finds transactions for the account identified by the given account ID.
@@ -111,7 +113,7 @@ const filter = {
   }
 const tx = getTransactionsByAccount(filter,50,0);
 ```
-```cURL
+```REST API call
 curl --request POST \
   --url https://api-eu1.tatum.io/v4/tatum/transaction/account \
   --header 'Content-Type: application/json' \
@@ -146,7 +148,7 @@ curl --request POST \
 
 The response will contain the details of all transactions from the given account.
 
-**Response example**
+**Response:**
 ```json
 [
   {
@@ -179,11 +181,11 @@ The response will contain the details of all transactions from the given account
 ---
 ## Getting a Bitcoin transaction
 
-Using the transaction ID of the withdrawal transaction, you can [get the details of the blockchain transaction](../blockchain/b3A6MjgzNjM1MTY-get-transaction-by-hash-or-address).
+Using the transaction ID of the withdrawal transaction, you can [get the details of the blockchain transaction](https://developer.tatum.io/rest/blockchain/get-transaction-by-hash).
 
-**Request example**
+
 <div class='tabbed-code-blocks'>
-```JavaScript
+```SDK
 import { btcGetTransaction } from '@tatumio/tatum';
 /**
  * @param hash - transaction hash
@@ -191,7 +193,7 @@ import { btcGetTransaction } from '@tatumio/tatum';
  */
 const transaction = btcGetTransaction('97bc1c3c23b179cba837e4060c0d07aa399f7ac7d34d91a7405cb5f801b93c8a');
 ```
-```cURL
+```REST API call
 curl --request GET \
   --url https://api-eu1.tatum.io/v4/blockchain/BTC/transaction/id \
   --header 'Content-Type: application/json' \
@@ -199,7 +201,8 @@ curl --request GET \
   --header 'x-api-key: '
 ```
 </div>
-**Response example**
+
+**Response:**
 <div class='tabbed-code-blocks'>
 ```json
 [
@@ -229,13 +232,10 @@ curl --request GET \
 ```
 </div>
 
-The required parameters for this call are `chainId`, which represents a supported blockchain, and `id`, which is the transaction hash or the user address related with the searched transaction.
-Optional parameters are `from`, `offset`, `sort` and `to`.
-The response provides any available details about the transaction.
+Let's take a look at this blockchain transaction. You can see that the transaction consumed two deposit transactions - vin array  - these are the two blockchain transactions credited to the account. As an output of the transaction - vout array - there are also two recipients. The first one is the recipient address you entered in the request. The second one is the address from your blockchain wallet with index 0. By default, Tatum uses address 0 of the blockchain wallet as an internal system address, where all the leftovers from the transactions are being acquired. They are used again in the next transaction.
 
-<!-- theme: info -->
->In blockchain transactions, unspent deposits from every blockchain address in the same blockchain wallet are automatically collected at the address 0. This is necessary to fully utilize Tatum's off-chain features.
+<div class="toolbar-note">
+In blockchain transactions, unspent deposits from every blockchain address in the same blockchain wallet are automatically collected at the address 0. This is necessary to fully utilize Tatum's off-chain features.
+</div>
 
----
-
-Thanks to the unified Tatum API calls, the logic presented above is applicable for all supported blockchains.
+The logic is the same for the [Litecoin](https://developer.tatum.io/rest/virtual-accounts/send-litecoin-from-tatum-account-to-address) and [Bitcoin Cash](https://developer.tatum.io/rest/virtual-accounts/send-bitcoin-cash-from-tatum-account-to-address) blockchains. Ethereum is based on different principles and will be described in a separate article.
