@@ -275,5 +275,3 @@ The typical flow is as follows:
 For more information on how to support virtual accounts and currencies in a crypto exchange, please refer to the following workshop:
 
 https://www.youtube.com/watch?v=CGgyyTTv0yw&t=209s&ab_channel=Tatum
-
-[How to send a feeless instant transaction](url)

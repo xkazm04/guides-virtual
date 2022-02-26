@@ -5,7 +5,7 @@ When you work with Tatum Virtual Accounts, you can perform instant transactions 
 This type of transaction consists of 3 steps:
 - [Create a withdrawal transaction](https://developer.tatum.io/rest/virtual-accounts/store-withdrawal) - this will perform a virtual account transaction from the source account. It will debit the amount from the source account.
 - [Perform a blockchain transaction](https://developer.tatum.io/rest/blockchain/send-bitcoin-to-blockchain-addresses) - in this step, the crypto assets are sent to the recipient's address. Any blockchain address from your blockchain wallet can be used as the source address of the blockchain transaction.
-- [Complete the withdrawal transaction](https://developer.tatum.io/rest/virtual-accounts/complete-withdrawal) - mark the withdrawal as successful and store the transaction ID of the blockchain transaction to the withdrawal operation. This step must be completed; otherwise, there will be inconsistencies within the virtual account state. If the blockchain transaction fails, the [withdrawal request must be canceled](../virtualAccounts/b3A6MjgwOTI1NzI-cancel-withdrawal), and the funds will be credited to the originating virtual account.
+- [Complete the withdrawal transaction](https://developer.tatum.io/rest/virtual-accounts/complete-withdrawal) - mark the withdrawal as successful and store the transaction ID of the blockchain transaction to the withdrawal operation. This step must be completed; otherwise, there will be inconsistencies within the virtual account state. If the blockchain transaction fails, the [withdrawal request must be canceled](https://developer.tatum.io/rest/virtual-accounts/complete-withdrawal), and the funds will be credited to the originating virtual account.
 
 All of these actions can be performed as [one API call](https://developer.tatum.io/rest/virtual-accounts/cancel-withdrawal) for a specific blockchain. The following example uses Bitcoin but the process is applicable for other blockchains as well.
 
@@ -96,7 +96,7 @@ We can see that the parameters `chainId`, `sender` and `receiver` are required i
 ---
 ## Getting virtual account transactions
 
-For a withdrawal, a [virtual account transaction](../virtualAccounts/b3A6MjgwOTcwNDg-list-account-transactions) will be created for the source virtual account. To look up the details of this withdrawal transaction, use the [find transactions for account](https://developer.tatum.io/rest/virtual-accounts/find-transactions-for-account) endpoint:
+For a withdrawal, a [virtual account transaction](https://developer.tatum.io/rest/virtual-accounts/b3A6MzA2MjE3NTY-find-transactions-for-account) will be created for the source virtual account. To look up the details of this withdrawal transaction, use the [find transactions for account](https://developer.tatum.io/rest/virtual-accounts/find-transactions-for-account) endpoint:
 
 
 <div class='tabbed-code-blocks'>
