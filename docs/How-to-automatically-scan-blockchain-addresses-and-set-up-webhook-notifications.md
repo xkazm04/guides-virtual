@@ -36,7 +36,7 @@ In this guide, you'll learn to how to:
 
 First we will create a virtual account to which we will connect a blockchain address (or addresses). To [create a virtual account](https://developer.tatum.io/rest/virtual-accounts/create-new-account), we must enter the xpub from a blockchain wallet into the body of the API endpoint. This is the first connection between the blockchain and the virtual account.
 
-To create a BTC blockchain wallet, please refer to [this guide](). 
+To create a BTC blockchain wallet, please refer to [this guide](https://developer.tatum.io/guides/blockchain/how-to-create-a-blockchain-wallet). 
 
 To create wallets on any other supported blockchain, please refer to the blockchain's respective section in our [API documentation](https://developer.tatum.io/rest/virtual-accounts/virtual-accounts).
 

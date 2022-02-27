@@ -8,8 +8,6 @@ To avoid these types of transactions and the fees that invariably come with them
 
 It's both extremely easy and highly practical to utilize virtual accounts to send instant transactions. As a prerequisite, you must have at least two virtual accounts with assets on at least one of them.
 
-[How to automatically scan blockchain addresses and set up webhook notifications](url)
-
 ---
 ## Performing a transaction between virtual accounts
 
@@ -21,13 +19,14 @@ A [virtual account transaction](https://developer.tatum.io/rest/virtual-accounts
 Tatum supports microtransactions. You can send as little as 1/1000000 of a Satoshi (Bitcoin denomination) or 1/1000000 of a Wei (Ethereum denomination) between virtual accounts.
 </div>
 
+[Send virtual account transaction](https://developer.tatum.io/rest/virtual-accounts/send-payment)
 
 <div class='tabbed-code-blocks'>
 ```SDK
 import {storeTransaction} from '@tatumio/tatum';
 /**
  * Sends a payment from one virtual account to another
- * @param transaction - body of the request - https://tatum.io/apidoc.php#operation/sendTransaction
+ * @param transaction
  */
 const body = {
   senderAccountId: "5fad2aa1cac7f2e8aeac0e6b",
@@ -45,7 +44,7 @@ const txReference = storeTransaction(body);
 ```
 ```REST API call
 curl --location --request 
-POST 'https://api-eu1.tatum.io/v4/ledger/transaction' \
+POST 'https://api-eu1.tatum.io/v3/ledger/transaction' \
 --header 'x-api-key: YOUR_API_KEY ' \ 
 --header 'Content-Type: application/json' \
 --data-raw '{
