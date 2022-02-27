@@ -8,9 +8,9 @@ This type of transaction consists of 3 steps:
 - [Complete the withdrawal transaction](https://developer.tatum.io/rest/virtual-accounts/complete-withdrawal) - mark the withdrawal as successful and store the transaction ID of the blockchain transaction to the withdrawal operation. This step must be completed; otherwise, there will be inconsistencies within the virtual account state. If the blockchain transaction fails, the [withdrawal request must be canceled](https://developer.tatum.io/rest/virtual-accounts/complete-withdrawal), and the funds will be credited to the originating virtual account.
 
 All of these actions can be performed as [one API call](https://developer.tatum.io/rest/virtual-accounts/cancel-withdrawal) for a specific blockchain. The following example uses Bitcoin but the process is applicable for other blockchains as well.
-
-<div class="toolbar-warning">
+¨
 #### Security
+<div class="toolbar-warning">
 In this guide, blockchain transactions are being signed using a private key via API.
 This is fine for testing and demo purposes, but for production use, it is not a secure way of signing transactions. 
 **Your private keys and mnemonics should never leave your security perimeter**. To correctly and securely sign a transaction, you can use [Tatum CLI](https://github.com/tatumio/tatum-cli); a specific language library like [Tatum JS](https://github.com/tatumio/tatum-js); the local [middleware API](https://github.com/tatumio/tatum-middleware); or our complex key management system, [Tatum KMS](https://github.com/tatumio/tatum-kms).
@@ -115,7 +115,7 @@ const tx = getTransactionsByAccount(filter,50,0);
 ```
 ```REST API call
 curl --request POST \
-  --url https://api-eu1.tatum.io/v4/tatum/transaction/account \
+  --url https://api-eu1.tatum.io/v3/ledger/transaction/account \
   --header 'Content-Type: application/json' \
   --header 'x-api-key: ' \
   --data '{
@@ -195,7 +195,7 @@ const transaction = btcGetTransaction('97bc1c3c23b179cba837e4060c0d07aa399f7ac7d
 ```
 ```REST API call
 curl --request GET \
-  --url https://api-eu1.tatum.io/v4/blockchain/BTC/transaction/id \
+  --url https://api-eu1.tatum.io/v3/blockchain/bitcoin/transaction/{hash} \
   --header 'Content-Type: application/json' \
   --header 'env: ' \
   --header 'x-api-key: '
