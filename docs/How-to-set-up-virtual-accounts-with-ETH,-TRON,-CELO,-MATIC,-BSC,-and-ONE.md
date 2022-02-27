@@ -34,6 +34,7 @@ First, we will show you how to generate a wallet and create virtual accounts and
 
 <div class="toolbar-note">
 The code snippets in this guide feature API endpoints for the Polygon blockchain, but the same process applies to all of the other blockchains listed above.
+</div>
 
 ### Generate a wallet
 
