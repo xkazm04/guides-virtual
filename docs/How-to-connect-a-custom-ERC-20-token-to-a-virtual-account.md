@@ -13,7 +13,7 @@ A virtual currency is an entity in the virtual account distributed database. It 
 Every virtual currency inside virtual accounts is pegged to a certain currency from the outside world - a blockchain asset or fiat currency. This means that one unit of the virtual currency is equal to some amount of the pegged currency.
 
 <div class="toolbar-note">
-When you create a virtual currency <i>MY_OWN_TOKEN</i> with the base pair <i>USD</i>, you can set your custom base rate. For instance, base rate 2 means that 1 MY_OWN_TOKEN = 2 USD.
+When you create a virtual currency `MY_OWN_TOKEN` with the base pair `USD`, you can set your custom base rate. For instance, base rate 2 means that 1 MY_OWN_TOKEN = 2 USD.
 </div>
 
 When you want to connect a custom ERC-20 token to virtual accounts and utilize off-chain features, there are two scenarios:
@@ -65,7 +65,7 @@ To unfreeze the account and connect the virtual currency to a blockchain ERC-20 
 <div class='tabbed-code-blocks'>
 ```json
 curl --request PUT \
-  --url https://api-eu1.tatum.io/v4/tatum/account/id/unfreeze \
+  --url  https://api-eu1.tatum.io/v3/ledger/account/id/freeze \
   --header 'Content-Type: application/json' \
   --header 'x-api-key: '
 ```
@@ -78,15 +78,15 @@ The request does not have any response when successful. Internally, it will [unf
 
 In this step, you will create a new ERC-20 on the blockchain, create a virtual currency in virtual accounts, and connect this virtual currency to the instance of the ERC-20 token. This can be done using two API calls. In the first call, you both [deploy your ERC-20 token](https://developer.tatum.io/rest/virtual-accounts/deploy-ethereum-erc-20-smart-contract-to-blockchain-and-ledger) and create the virtual account currency.
 
-<div class="toolbar-note">
 #### Security
+<div class="toolbar-caution">
 Blockchain transactions are signed using a private key via API, which is not a secure way of signing transactions. Your private keys and mnemonics should never leave your security perimeter. To correctly and securely sign a transaction, you can use the [Tatum CLI](https://github.com/tatumio/tatum-cli); a specific language library like [Tatum JS](https://github.com/tatumio/tatum-js); local [middleware API](https://github.com/tatumio/tatum-middleware); or our complex key management system, [Tatum KMS](https://github.com/tatumio/tatum-kms).
 </div>
 
 <div class='tabbed-code-blocks'>
 ```Request
 curl --request POST \
-  --url https://api-eu1.tatum.io/v4/tatum/token \
+  --url https://api-eu1.tatum.io/v3/ledger/virtualCurrency \
   --header 'Content-Type: application/json' \
   --header 'x-api-key: ' \
   --data '{
@@ -127,54 +127,12 @@ The response includes the `id` of the virtual account, with `accountBalance` bei
 
 The second property is the `transaction ID` of the blockchain transaction that created the ERC-20 token. To obtain the contract address, you need to [get the details of the transaction](https://developer.tatum.io/rest/blockchain/get-ethereum-transaction). You can see the property `contractAddress`, which is the address of the ERC-20 token.
 
-<div class='tabbed-code-blocks'>
-```Request
-curl --request GET \
-  --url https://api-eu1.tatum.io/v4/blockchain/chainId/transaction/id \
-  --header 'Content-Type: application/json' \
-  --header 'env: ' \
-  --header 'x-api-key: '
-```
-```Response
-[
-  {
-    "block": {
-      "hash": "000ca231a439a5c0a86a5a5dd6dc1918a8",
-      "height": 500124
-    },
-    "hash": 1,
-    "index": "d1c75a84e4bdf0dd9bf1bcd0ce4fb25f89e2ed3c5e9574dbca2760b52c428717",
-    "fee": {
-      "price": 50,
-      "limit": 50000,
-      "currency": "CELO"
-    },
-    "addressFrom": "2MsM67NLa71fHvTUBqNENW15P68nHB2vVXb",
-    "addressTo": "2MsM67NLa71fHvTUBqNENW15P68nHB2vVXb",
-    "token": {
-      "contractAddress": "2MsM67NLa71fHvTUBqNENW15P68nHB2vVXb",
-      "currencySymbol": "BTC",
-      "amount": 0
-    },
-    "status": "true",
-    "timestamp": "2021-21-10 07:36:05"
-  }
-]
-```
-</div>
-
 To unfreeze the account and connect the virtual currency to a blockchain ERC-20 token, you need to [provide the address of the ERC-20 token](https://developer.tatum.io/rest/virtual-accounts/set-erc-20-bep-20-hrm-20-trc-20-kcs-20-token-contract-address) and the name of the virtual currency as seen in the request below.
 
 <div class='tabbed-code-blocks'>
 ```Create currency
 curl --location --request POST 'https://api-eu1.tatum.io/v3/offchain/token/TestToken/0x5a14C4ebc2e20eEB820C5197fc408a3CB9E27B75' \
 --header 'x-api-key: YOUR_API_KEY '
-```
-```Unfreeze
-curl --request PUT \
-  --url https://api-eu1.tatum.io/v4/tatum/account/id/unfreeze \
-  --header 'Content-Type: application/json' \
-  --header 'x-api-key: '
 ```
 </div>
 
