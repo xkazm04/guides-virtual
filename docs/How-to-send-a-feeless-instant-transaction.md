@@ -80,8 +80,7 @@ import {getTransactionsByReference} from '@tatumio/tatum';
 /**
  * Finds transactions for all accounts with the given reference.
  * @param reference - transaction reference within Tatum Private Ledger
- */
- 
+*/
 const tx = getTransactionsByReference("9e179f90-0221-480f-adb4-28bd1937bb20");
 ```
 ```REST API call
