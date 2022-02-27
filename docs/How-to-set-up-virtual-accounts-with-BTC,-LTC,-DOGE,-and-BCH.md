@@ -31,7 +31,6 @@ To [generate a Bitcoin wallet](https://developer.tatum.io/rest/blockchain/genera
 // You need to install the Javascript library
 // https://github.com/tatumio/tatum-js
 const {generateWallet, Currency} = require("@tatumio/tatum");
-
 const btcWallet = generateWallet(Currency.BTC, false);
 console.log(btcWallet);
 ```

@@ -68,7 +68,7 @@ You can now [get details about the account](https://developer.tatum.io/rest/virt
 import {getAccountById} from '@tatumio/tatum';
 /**
  * Gets active account by ID.
- * Displays all information regarding the given account - https://tatum.io/apidoc.php#operation/getAccountByAccountId
+ * Displays all information regarding the given account 
  * @param id - ledger account ID
  */
 const account = getAccountById("5fbaca3001421166273b3779");
@@ -116,8 +116,7 @@ import { getBlockedAmountsByAccountId  } from '@tatumio/tatum';
  * @param pageSize - max number of items per page is 50
  * @param offset - optional Offset to obtain next page of the data
  * @returns - detail of blocked amounts - https://tatum.io/apidoc.php#operation/getBlockAmount
- */
- 
+*/
 const amounts = getBlockedAmountsByAccountId("5fbaca3001421166273b3779?pageSize=50");
 ```
 ```REST API call
