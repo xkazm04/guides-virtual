@@ -23,7 +23,7 @@ When you want to connect a custom ERC-20 token to virtual accounts and utilize o
 ---
 ## Connecting an existing ERC-20 token
 
-If you want to support an existing ERC-20 token, you only need to [create a virtual currency representing the ERC-20](https://developer.tatum.io/rest/virtual-accounts/register-new-erc-20-token-in-the-ledger) token inside virtual accounts. You need to enter the symbol of the existing ERC-20 (`symbol`); supply which will be credited to the virtual account inside Tatum (`supply`); a base pair (`basePair`); and the blockchain address where the initial supply was transferred (`address`). Let's use the [Tatum Test Token](https://ropsten.etherscan.io/token/0xb3858430b7ed404747b9561027d2c01a72610f43), an ERC-20 token issued for testing purposes by Tatum.
+If you want to support an existing ERC-20 token, you only need to [create a virtual currency representing the ERC-20](https://docs.tatum.io/rest/virtual-accounts/register-new-erc-20-token-in-the-ledger) token inside virtual accounts. You need to enter the symbol of the existing ERC-20 (`symbol`); supply which will be credited to the virtual account inside Tatum (`supply`); a base pair (`basePair`); and the blockchain address where the initial supply was transferred (`address`). Let's use the [Tatum Test Token](https://ropsten.etherscan.io/token/0xb3858430b7ed404747b9561027d2c01a72610f43), an ERC-20 token issued for testing purposes by Tatum.
 
 <div class='tabbed-code-blocks'>
 ```Request
@@ -59,7 +59,7 @@ The call's result is the virtual account's ID, with an account balance of the su
 
 [Off-chain]()
 
-To unfreeze the account and connect the virtual currency to a blockchain ERC-20 token, you need to [provide the address of the ERC-20 token](https://developer.tatum.io/rest/virtual-accounts/set-erc-20-bep-20-hrm-20-trc-20-kcs-20-token-contract-address) and the name of the virtual currency.
+To unfreeze the account and connect the virtual currency to a blockchain ERC-20 token, you need to [provide the address of the ERC-20 token](https://docs.tatum.io/rest/virtual-accounts/set-erc-20-bep-20-hrm-20-trc-20-kcs-20-token-contract-address) and the name of the virtual currency.
 
 
 <div class='tabbed-code-blocks'>
@@ -71,12 +71,12 @@ curl --request PUT \
 ```
 </div>
 
-The request does not have any response when successful. Internally, it will [unfreeze the account](https://developer.tatum.io/rest/virtual-accounts/unfreeze-account) created in the previous step and start the automatic synchronization of incoming transactions for connected accounts and addresses. It is also possible to create a virtual account of your virtual currency and utilize all the instant feeless virtual account transactions.
+The request does not have any response when successful. Internally, it will [unfreeze the account](https://docs.tatum.io/rest/virtual-accounts/unfreeze-account) created in the previous step and start the automatic synchronization of incoming transactions for connected accounts and addresses. It is also possible to create a virtual account of your virtual currency and utilize all the instant feeless virtual account transactions.
 
 ---
 ## Creating and connecting a new ERC-20 token
 
-In this step, you will create a new ERC-20 on the blockchain, create a virtual currency in virtual accounts, and connect this virtual currency to the instance of the ERC-20 token. This can be done using two API calls. In the first call, you both [deploy your ERC-20 token](https://developer.tatum.io/rest/virtual-accounts/deploy-ethereum-erc-20-smart-contract-to-blockchain-and-ledger) and create the virtual account currency.
+In this step, you will create a new ERC-20 on the blockchain, create a virtual currency in virtual accounts, and connect this virtual currency to the instance of the ERC-20 token. This can be done using two API calls. In the first call, you both [deploy your ERC-20 token](https://docs.tatum.io/rest/virtual-accounts/deploy-ethereum-erc-20-smart-contract-to-blockchain-and-ledger) and create the virtual account currency.
 
 #### Security
 <div class="toolbar-caution">
@@ -125,9 +125,9 @@ curl --request POST \
 
 The response includes the `id` of the virtual account, with `accountBalance` being the supply at the blockchain address. The account is frozen (`"frozen": true`) unless the virtual currency is connected to a specific ERC-20 on the blockchain.
 
-The second property is the `transaction ID` of the blockchain transaction that created the ERC-20 token. To obtain the contract address, you need to [get the details of the transaction](https://developer.tatum.io/rest/blockchain/get-ethereum-transaction). You can see the property `contractAddress`, which is the address of the ERC-20 token.
+The second property is the `transaction ID` of the blockchain transaction that created the ERC-20 token. To obtain the contract address, you need to [get the details of the transaction](https://docs.tatum.io/rest/blockchain/get-ethereum-transaction). You can see the property `contractAddress`, which is the address of the ERC-20 token.
 
-To unfreeze the account and connect the virtual currency to a blockchain ERC-20 token, you need to [provide the address of the ERC-20 token](https://developer.tatum.io/rest/virtual-accounts/set-erc-20-bep-20-hrm-20-trc-20-kcs-20-token-contract-address) and the name of the virtual currency as seen in the request below.
+To unfreeze the account and connect the virtual currency to a blockchain ERC-20 token, you need to [provide the address of the ERC-20 token](https://docs.tatum.io/rest/virtual-accounts/set-erc-20-bep-20-hrm-20-trc-20-kcs-20-token-contract-address) and the name of the virtual currency as seen in the request below.
 
 <div class='tabbed-code-blocks'>
 ```Create currency
@@ -136,4 +136,4 @@ curl --location --request POST 'https://api-eu1.tatum.io/v3/offchain/token/TestT
 ```
 </div>
 
-The request does not have any response when successful. Internally, it will [unfreeze the account](https://developer.tatum.io/rest/virtual-accounts/unfreeze-account) created in the previous step and start the automatic synchronization of incoming transactions for connected accounts and addresses. It is also possible to create a virtual account of your virtual currency and utilize all the instant feeless virtual account transactions.
+The request does not have any response when successful. Internally, it will [unfreeze the account](https://docs.tatum.io/rest/virtual-accounts/unfreeze-account) created in the previous step and start the automatic synchronization of incoming transactions for connected accounts and addresses. It is also possible to create a virtual account of your virtual currency and utilize all the instant feeless virtual account transactions.

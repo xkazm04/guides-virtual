@@ -34,11 +34,11 @@ In this guide, you'll learn to how to:
 
 ## Create a virtual account
 
-First we will create a virtual account to which we will connect a blockchain address (or addresses). To [create a virtual account](https://developer.tatum.io/rest/virtual-accounts/create-new-account), we must enter the xpub from a blockchain wallet into the body of the API endpoint. This is the first connection between the blockchain and the virtual account.
+First we will create a virtual account to which we will connect a blockchain address (or addresses). To [create a virtual account](https://docs.tatum.io/rest/virtual-accounts/create-new-account), we must enter the xpub from a blockchain wallet into the body of the API endpoint. This is the first connection between the blockchain and the virtual account.
 
-To create a BTC blockchain wallet, please refer to [this guide](https://developer.tatum.io/guides/blockchain/how-to-create-a-blockchain-wallet). 
+To create a BTC blockchain wallet, please refer to [this guide](https://docs.tatum.io/guides/blockchain/how-to-create-a-blockchain-wallet). 
 
-To create wallets on any other supported blockchain, please refer to the blockchain's respective section in our [API documentation](https://developer.tatum.io/rest/virtual-accounts/virtual-accounts).
+To create wallets on any other supported blockchain, please refer to the blockchain's respective section in our [API documentation](https://docs.tatum.io/rest/virtual-accounts/virtual-accounts).
 
 <div class="toolbar-warning">
 Every virtual account is of a specific currency, which must be defined when it is created. This currency cannot be changed in the future (i.e. a BTC virtual account can only be connected to BTC addresses and will always be a BTC account).
@@ -94,14 +94,14 @@ The response contains information about your newly generated virtual account.
 
 <div class="toolbar-note">
 >Virtual accounts can also be assigned to customers in Tatum. A customer inside Tatum is an entity containing information about a specific user of your application, such as their country of residence, accounting currency, etc. 
-To create a customer, you simply need to include an `externalId` field when creating a virtual account. This is an identifier of the user in your external system. More details are available in the [API Reference](https://developer.tatum.io/rest/virtual-accounts/virtual-accounts).
+To create a customer, you simply need to include an `externalId` field when creating a virtual account. This is an identifier of the user in your external system. More details are available in the [API Reference](https://docs.tatum.io/rest/virtual-accounts/virtual-accounts).
 </div>
 
 ## Generate a blockchain address and connect it to the virtual account
 
 Now that you've created a virtual account, you must synchronize it with the blockchain. Until you do, there is no blockchain address connected to the account, only a blockchain wallet from which addresses will be chosen. 
 
-Use the [create new deposit address](https://developer.tatum.io/rest/virtual-accounts/create-new-deposit-address) endpoint to generate an address for the account.
+Use the [create new deposit address](https://docs.tatum.io/rest/virtual-accounts/create-new-deposit-address) endpoint to generate an address for the account.
 
 **Request example**
 <div class='tabbed-code-blocks'>
@@ -140,7 +140,7 @@ Any incoming blockchain transaction to this address will be automatically synchr
 
 It is possible to work with only one blockchain address connected to the account, but you can also connect as many addresses as you want. The virtual account's balance will reflect the sum of all connected blockchain addresses.
 
-Your app's users will most likely want to be able to see all of the addresses connected to their account. You can view all a list of them using the off-chain method [Get all deposit addresses](https://developer.tatum.io/rest/virtual-accounts/get-all-deposit-addresses-for-account).
+Your app's users will most likely want to be able to see all of the addresses connected to their account. You can view all a list of them using the off-chain method [Get all deposit addresses](https://docs.tatum.io/rest/virtual-accounts/get-all-deposit-addresses-for-account).
 
 **Request example**
 <div class='tabbed-code-blocks'>
@@ -233,7 +233,7 @@ The required parameters are for an incoming transactions subscription are:
 - Transaction history reports: `TRANSACTION_HISTORY_REPORT`
 
 <div class="toolbar-note">
-Different types of subscriptions have different required parameters. For a full list of each type with example API endpoint bodies, please refer to our [API documentation](https://developer.tatum.io/rest/virtual-accounts/virtual-accounts).
+Different types of subscriptions have different required parameters. For a full list of each type with example API endpoint bodies, please refer to our [API documentation](https://docs.tatum.io/rest/virtual-accounts/virtual-accounts).
 </div>
 
 ---
@@ -246,7 +246,7 @@ Once you've followed the above steps, you can test out your webhook notification
 
 1. Send some crypto from a testnet faucet on your blockchain of choice to the blockchain address connected to your virtual account (e.g. 0.001 BTC).
 2. Check the blockchain address (either in the blockchain's explorer or using a **get account balance** endpoint in Tatum) to confirm that the transaction has arrived. This could take a little bit of time, so we'd suggest waiting a few minutes, then trying again in another 5 minutes if it hasn't arrived yet.
-3. Check your virtual account's balance using [this endpoint](https://developer.tatum.io/rest/virtual-accounts/get-account-balance).
+3. Check your virtual account's balance using [this endpoint](https://docs.tatum.io/rest/virtual-accounts/get-account-balance).
 4. Now, check your webhook listener (the URL you entered when creating the subscription) to confirm that the webhook has correctly been sent.
 
 # And that's it!

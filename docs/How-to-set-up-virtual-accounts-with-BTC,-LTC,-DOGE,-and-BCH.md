@@ -23,7 +23,7 @@ In this guide, we will generate just one blockchain wallet for all of our virtua
 
 In this guide, we will use examples for the Bitcoin blockchain, but the process is the same for all of the other blockchains listed above.
 
-To [generate a Bitcoin wallet](https://developer.tatum.io/rest/blockchain/generate-bitcoin-wallet), use the following API endpoint:
+To [generate a Bitcoin wallet](https://docs.tatum.io/rest/blockchain/generate-bitcoin-wallet), use the following API endpoint:
 
 **Request example**
 <div class='tabbed-code-blocks'>
@@ -65,7 +65,7 @@ Now, you can generate BTC virtual accounts connected to the xpub of the wallet y
 The reason virtual accounts for UTXO blockchains must be generated from the same xpub, is that UTXO blockchains are capable of performing multiple transactions at once. If the virtual accounts were generated from different xpubs, it would be impossible to keep track of which assets were being sent from which wallet.
 </div>
 
-Use the following API endpoint to [generate BTC virtual accounts](https://developer.tatum.io/rest/virtual-accounts/create-new-account). In the "xpub" field, enter the xpub of the wallet you generated in the previous step.
+Use the following API endpoint to [generate BTC virtual accounts](https://docs.tatum.io/rest/virtual-accounts/create-new-account). In the "xpub" field, enter the xpub of the wallet you generated in the previous step.
 
 **Request example**
 <div class='tabbed-code-blocks'>
@@ -125,7 +125,7 @@ curl --request POST \
 
 Finally, we create deposit addresses for each virtual account. Again, these deposit addresses MUST be generated from the xpub of the wallet we generated in the first step. If they are not generated from the same xpub, they will not function properly.
 
-Use the following API endpoint to [generate deposit addresses for each virtual account](https://developer.tatum.io/rest/virtual-accounts/create-new-deposit-address):
+Use the following API endpoint to [generate deposit addresses for each virtual account](https://docs.tatum.io/rest/virtual-accounts/create-new-deposit-address):
 
 **Request example**
 <div class='tabbed-code-blocks'>

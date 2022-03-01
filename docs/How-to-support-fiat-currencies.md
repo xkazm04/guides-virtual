@@ -8,7 +8,7 @@ A fiat currency is a government-issued currency that isn't backed by a commodity
 
 In addition to crypto accounts, virtual accounts also support private virtual currencies. A virtual currency does not have to be connected to the blockchain. It can live within the virtual accounts alone. When you create your own virtual currency, you can then create accounts and send virtual account transactions.
 
-[How to automatically scan blockchain addresses and set up webhook notifications](url)
+[How to automatically scan blockchain addresses and set up webhook notifications](https://docs.tatum.io/guides/ledger-and-off-chain/how-to-automatically-scan-blockchain-addresses-and-set-up-webhook-notifications)
 
 <div class="toolbar-note">
 A virtual currency is an entity in the virtual account distributed database. It is created with an initial supply of coins. This supply can be extended or reduced at any time.
@@ -23,7 +23,7 @@ When you create a virtual currency <i>VC_USD</i> with the base pair <i>USD</i>, 
 ---
 ## Creating a virtual currency
 
-To support fiat currencies, you can [create your own virtual currency](https://developer.tatum.io/rest/virtual-accounts/create-new-virtual-currency) with the base pair as the currency you want to support.
+To support fiat currencies, you can [create your own virtual currency](https://docs.tatum.io/rest/virtual-accounts/create-new-virtual-currency) with the base pair as the currency you want to support.
 
 
 <div class='tabbed-code-blocks'>
@@ -88,7 +88,7 @@ The result of the call is a virtual account of the given virtual currency. The i
 ## Increasing the supply of a virtual currency
 
 
-When you want to [increase the supply of a virtual currency](https://developer.tatum.io/rest/virtual-accounts/create-new-supply-of-virtual-currency), you have to mint new units. Minted units are credited to a specific virtual account, and the operation is visible as a new virtual account transaction for that account.
+When you want to [increase the supply of a virtual currency](https://docs.tatum.io/rest/virtual-accounts/create-new-supply-of-virtual-currency), you have to mint new units. Minted units are credited to a specific virtual account, and the operation is visible as a new virtual account transaction for that account.
 
 <div class='tabbed-code-blocks'>
 ```SDK
@@ -136,7 +136,7 @@ A `reference` to the virtual account transaction is given in the response.
 ---
 ## Destroying the supply of a virtual currency
 
-When you want to [decrease the supply of a virtual currency](https://developer.tatum.io/rest/virtual-accounts/destroy-supply-of-virtual-currency), you have to revoke some units. The revoked units are debited from the virtual account they were first credited to, and the operation is visible as a new virtual account transaction for the account.
+When you want to [decrease the supply of a virtual currency](https://docs.tatum.io/rest/virtual-accounts/destroy-supply-of-virtual-currency), you have to revoke some units. The revoked units are debited from the virtual account they were first credited to, and the operation is visible as a new virtual account transaction for the account.
 
 **Request example**
 <div class='tabbed-code-blocks'>
@@ -182,7 +182,7 @@ A `reference` to the virtual account transaction is given in the response.
 ---
 ## Listing account transactions
 
-When we get the [list of account transactions](https://developer.tatum.io/rest/virtual-accounts/find-transactions-for-account) now, we can see two operations - mint and revoke.
+When we get the [list of account transactions](https://docs.tatum.io/rest/virtual-accounts/find-transactions-for-account) now, we can see two operations - mint and revoke.
 
 <div class='tabbed-code-blocks'>
 ```SDK

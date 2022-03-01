@@ -38,7 +38,7 @@ The code snippets in this guide feature API endpoints for the Polygon blockchain
 
 ### Generate a wallet
 
-If you want to create new deposit addresses for virtual accounts, you must [generate a wallet on Polygon](https://developer.tatum.io/rest/blockchain/generate-polygon-wallet).
+If you want to create new deposit addresses for virtual accounts, you must [generate a wallet on Polygon](https://docs.tatum.io/rest/blockchain/generate-polygon-wallet).
 
 <div class="toolbar-note">
 If you want to connect existing deposit addresses to virtual accounts, you can skip this step and the "**Create deposit addresses**" step and instead "**Connect virtual accounts to existing blockchain addresses**" using the instructions below.
@@ -75,7 +75,7 @@ The response will be the wallet's xpub and mnemonic.
 
 ## Create virtual accounts
 
-Next, you can [create virtual accounts](https://developer.tatum.io/rest/virtual-accounts/create-new-account) from the xpub of the wallet.
+Next, you can [create virtual accounts](https://docs.tatum.io/rest/virtual-accounts/create-new-account) from the xpub of the wallet.
 
 <div class='tabbed-code-blocks'>
 ```SDK
@@ -123,7 +123,7 @@ The response will contain details about your newly created account, including th
 
 ## Create blockchain addresses
 
-Now, you can [create blockchain addresses](https://developer.tatum.io/rest/virtual-accounts/create-new-deposit-address) for each virtual account.
+Now, you can [create blockchain addresses](https://docs.tatum.io/rest/virtual-accounts/create-new-deposit-address) for each virtual account.
 
 <div class='tabbed-code-blocks'>
 ```SDK
@@ -159,7 +159,7 @@ The response will contain the blockchain address you have just generated.
 
 ## Connect virtual accounts to existing blockchain addresses
 
-Alternatively, you can connect the virtual accounts you created above to existing blockchain addresses. To do so, use the [assign address to account](https://developer.tatum.io/rest/virtual-accounts/assign-address-for-account) endpoint, and enter the account ID of a virtual account and the blockchain address you'd like to connect it to:
+Alternatively, you can connect the virtual accounts you created above to existing blockchain addresses. To do so, use the [assign address to account](https://docs.tatum.io/rest/virtual-accounts/assign-address-for-account) endpoint, and enter the account ID of a virtual account and the blockchain address you'd like to connect it to:
 
 <div class='tabbed-code-blocks'>
 ```SDK
@@ -230,7 +230,7 @@ However, since there is only one address from which assets are withdrawn, you do
 
 ### Create a master address for all withdrawals
 
-In this approach, you should create a deposit address on the blockchain to which you will send every incoming transaction received to every deposit address. Use the following API endpoint to [generate a deposit address on Polygon](https://developer.tatum.io/rest/blockchain/generate-polygon-account-address-from-extended-public-key):
+In this approach, you should create a deposit address on the blockchain to which you will send every incoming transaction received to every deposit address. Use the following API endpoint to [generate a deposit address on Polygon](https://docs.tatum.io/rest/blockchain/generate-polygon-account-address-from-extended-public-key):
 
 <div class='tabbed-code-blocks'>
 ```SDK

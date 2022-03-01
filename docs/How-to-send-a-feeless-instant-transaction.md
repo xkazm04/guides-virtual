@@ -11,7 +11,7 @@ It's both extremely easy and highly practical to utilize virtual accounts to sen
 ---
 ## Performing a transaction between virtual accounts
 
-A [virtual account transaction](https://developer.tatum.io/rest/virtual-accounts/send-payment) is a transaction that is settled immediately with no blockchain fee incurred. It is a transaction between two virtual accounts with the same account currency, e.g. Bitcoin accounts, Ethereum accounts, or your custom fiat accounts.
+A [virtual account transaction](https://docs.tatum.io/rest/virtual-accounts/send-payment) is a transaction that is settled immediately with no blockchain fee incurred. It is a transaction between two virtual accounts with the same account currency, e.g. Bitcoin accounts, Ethereum accounts, or your custom fiat accounts.
 
 
 <div class="toolbar-note">
@@ -19,7 +19,7 @@ A [virtual account transaction](https://developer.tatum.io/rest/virtual-accounts
 Tatum supports microtransactions. You can send as little as 1/1000000 of a Satoshi (Bitcoin denomination) or 1/1000000 of a Wei (Ethereum denomination) between virtual accounts.
 </div>
 
-[Send virtual account transaction](https://developer.tatum.io/rest/virtual-accounts/send-payment)
+[Send virtual account transaction](https://docs.tatum.io/rest/virtual-accounts/send-payment)
 
 <div class='tabbed-code-blocks'>
 ```SDK
@@ -146,4 +146,4 @@ The market value in the transaction is part of the compliance engine built into 
 
 ## And that's it!
 
-You can easily perform instant transactions and get details about them with 2 API calls. You can also obtain a [list of transactions for the specific account](https://developer.tatum.io/rest/virtual-accounts/find-transactions-for-account) or [find customer transactions across multiple accounts](https://developer.tatum.io/rest/virtual-accounts/find-transactions-for-a-customer-across-all-of-the-customer-s-accounts).
+You can easily perform instant transactions and get details about them with 2 API calls. You can also obtain a [list of transactions for the specific account](https://docs.tatum.io/rest/virtual-accounts/find-transactions-for-account) or [find customer transactions across multiple accounts](https://docs.tatum.io/rest/virtual-accounts/find-transactions-for-a-customer-across-all-of-the-customer-s-accounts).

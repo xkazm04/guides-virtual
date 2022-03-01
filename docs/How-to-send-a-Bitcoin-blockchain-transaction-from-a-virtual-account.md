@@ -3,11 +3,11 @@
 When you work with Tatum Virtual Accounts, you can perform instant transactions between virtual accounts which are not written to the underlying blockchain. But every once and a while, you need to synchronize some of the transactions to the blockchain. In this case, you have to perform a virtual account-to-blockchain transaction. As a prerequisite, you must have a virtual account with credited blockchain transactions available. 
 
 This type of transaction consists of 3 steps:
-- [Create a withdrawal transaction](https://developer.tatum.io/rest/virtual-accounts/store-withdrawal) - this will perform a virtual account transaction from the source account. It will debit the amount from the source account.
-- [Perform a blockchain transaction](https://developer.tatum.io/rest/blockchain/send-bitcoin-to-blockchain-addresses) - in this step, the crypto assets are sent to the recipient's address. Any blockchain address from your blockchain wallet can be used as the source address of the blockchain transaction.
-- [Complete the withdrawal transaction](https://developer.tatum.io/rest/virtual-accounts/complete-withdrawal) - mark the withdrawal as successful and store the transaction ID of the blockchain transaction to the withdrawal operation. This step must be completed; otherwise, there will be inconsistencies within the virtual account state. If the blockchain transaction fails, the [withdrawal request must be canceled](https://developer.tatum.io/rest/virtual-accounts/complete-withdrawal), and the funds will be credited to the originating virtual account.
+- [Create a withdrawal transaction](https://docs.tatum.io/rest/virtual-accounts/store-withdrawal) - this will perform a virtual account transaction from the source account. It will debit the amount from the source account.
+- [Perform a blockchain transaction](https://docs.tatum.io/rest/blockchain/send-bitcoin-to-blockchain-addresses) - in this step, the crypto assets are sent to the recipient's address. Any blockchain address from your blockchain wallet can be used as the source address of the blockchain transaction.
+- [Complete the withdrawal transaction](https://docs.tatum.io/rest/virtual-accounts/complete-withdrawal) - mark the withdrawal as successful and store the transaction ID of the blockchain transaction to the withdrawal operation. This step must be completed; otherwise, there will be inconsistencies within the virtual account state. If the blockchain transaction fails, the [withdrawal request must be canceled](https://docs.tatum.io/rest/virtual-accounts/complete-withdrawal), and the funds will be credited to the originating virtual account.
 
-All of these actions can be performed as [one API call](https://developer.tatum.io/rest/virtual-accounts/cancel-withdrawal) for a specific blockchain. The following example uses Bitcoin but the process is applicable for other blockchains as well.
+All of these actions can be performed as [one API call](https://docs.tatum.io/rest/virtual-accounts/cancel-withdrawal) for a specific blockchain. The following example uses Bitcoin but the process is applicable for other blockchains as well.
 ¨
 #### Security
 <div class="toolbar-warning">
@@ -20,7 +20,7 @@ This is fine for testing and demo purposes, but for production use, it is not a 
 ## Sending Bitcoin from a virtual account to the blockchain
 
 
-This operation will [withdraw BTC from a virtual account to a blockchain address](https://developer.tatum.io/rest/virtual-accounts/send-bitcoin-from-tatum-account-to-address).
+This operation will [withdraw BTC from a virtual account to a blockchain address](https://docs.tatum.io/rest/virtual-accounts/send-bitcoin-from-tatum-account-to-address).
 
 
 <div class='tabbed-code-blocks'>
@@ -96,7 +96,7 @@ We can see that the parameters `chainId`, `sender` and `receiver` are required i
 ---
 ## Getting virtual account transactions
 
-For a withdrawal, a [virtual account transaction](https://developer.tatum.io/rest/virtual-accounts/b3A6MzA2MjE3NTY-find-transactions-for-account) will be created for the source virtual account. To look up the details of this withdrawal transaction, use the [find transactions for account](https://developer.tatum.io/rest/virtual-accounts/find-transactions-for-account) endpoint:
+For a withdrawal, a [virtual account transaction](https://docs.tatum.io/rest/virtual-accounts/b3A6MzA2MjE3NTY-find-transactions-for-account) will be created for the source virtual account. To look up the details of this withdrawal transaction, use the [find transactions for account](https://docs.tatum.io/rest/virtual-accounts/find-transactions-for-account) endpoint:
 
 
 <div class='tabbed-code-blocks'>
@@ -181,7 +181,7 @@ The response will contain the details of all transactions from the given account
 ---
 ## Getting a Bitcoin transaction
 
-Using the transaction ID of the withdrawal transaction, you can [get the details of the blockchain transaction](https://developer.tatum.io/rest/blockchain/get-transaction-by-hash).
+Using the transaction ID of the withdrawal transaction, you can [get the details of the blockchain transaction](https://docs.tatum.io/rest/blockchain/get-transaction-by-hash).
 
 
 <div class='tabbed-code-blocks'>
@@ -238,4 +238,4 @@ Let's take a look at this blockchain transaction. You can see that the transacti
 In blockchain transactions, unspent deposits from every blockchain address in the same blockchain wallet are automatically collected at the address 0. This is necessary to fully utilize Tatum's off-chain features.
 </div>
 
-The logic is the same for the [Litecoin](https://developer.tatum.io/rest/virtual-accounts/send-litecoin-from-tatum-account-to-address) and [Bitcoin Cash](https://developer.tatum.io/rest/virtual-accounts/send-bitcoin-cash-from-tatum-account-to-address) blockchains. Ethereum is based on different principles and will be described in a separate article.
+The logic is the same for the [Litecoin](https://docs.tatum.io/rest/virtual-accounts/send-litecoin-from-tatum-account-to-address) and [Bitcoin Cash](https://docs.tatum.io/rest/virtual-accounts/send-bitcoin-cash-from-tatum-account-to-address) blockchains. Ethereum is based on different principles and will be described in a separate article.

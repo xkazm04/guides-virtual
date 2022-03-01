@@ -21,7 +21,7 @@ In this guide, we will be using XRP to demonstrate how to set up virtual account
 All of the virtual accounts for XRP, BNB, or XLM within your app must be connected to the same wallet address on each respective blockchain. If virtual accounts are connected to deposit addresses generated from different addresses from different wallets, they will not function properly.
 </div>
 
-Use the following API endpoint to [generate an XRP wallet](https://developer.tatum.io/rest/blockchain/generate-xrp-account):
+Use the following API endpoint to [generate an XRP wallet](https://docs.tatum.io/rest/blockchain/generate-xrp-account):
 
 <div class='tabbed-code-blocks'>
 ```SDK
@@ -60,7 +60,7 @@ The response will contain your wallet's xpub in the "address" field and private 
 
 Now, you can generate XRP virtual accounts connected to the xpub of the wallet you have just generated. You can generate as many virtual accounts as you want, but they must all be connected to the same xpub in order to function properly.
 
-Use the following API endpoint to [generate XRP virtual accounts](https://developer.tatum.io/rest/virtual-accounts/create-new-account). In the "xpub" field, enter the xpub of the wallet you generated in the previous step.
+Use the following API endpoint to [generate XRP virtual accounts](https://docs.tatum.io/rest/virtual-accounts/create-new-account). In the "xpub" field, enter the xpub of the wallet you generated in the previous step.
 
 <div class='tabbed-code-blocks'>
 ```SDK
@@ -124,7 +124,7 @@ Finally, we create deposit addresses for each virtual account. Again, these depo
 On XRP and XLM, you must freeze a specific amount of assets for each deposit address you create.  If you are creating 1,000,000 deposit addresses, this will cost you a ridiculous amount of money. For this reason, every virtual account uses the same deposit address, which is the same address as the wallet's xpub. 
 </div>
 
-Use the following API endpoint to [generate deposit addresses for each virtual account](https://developer.tatum.io/rest/virtual-accounts/create-new-deposit-address):
+Use the following API endpoint to [generate deposit addresses for each virtual account](https://docs.tatum.io/rest/virtual-accounts/create-new-deposit-address):
 
 
 <div class='tabbed-code-blocks'>
