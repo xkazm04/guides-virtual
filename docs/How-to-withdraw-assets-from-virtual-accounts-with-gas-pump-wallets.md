@@ -8,7 +8,7 @@ This guide describes how to withdraw assets from virtual accounts connected to g
 ---
 ## Wallet generation
 
-The first step is to [create a gas pump wallet](https://developer.tatum.io/rest/smart-contracts/generate-custodial-wallet-address) for every user. You can choose which ERC-* standards you want to support in the wallet - native assets like ETH or BSC are supported by default. In this example, we will support the native currency (MATIC) on Polygon and any ERC-20 tokens running on the Polygon network.
+The first step is to [create a gas pump wallet](https://docs.tatum.io/rest/smart-contracts/generate-custodial-wallet-address) for every user. You can choose which ERC-* standards you want to support in the wallet - native assets like ETH or BSC are supported by default. In this example, we will support the native currency (MATIC) on Polygon and any ERC-20 tokens running on the Polygon network.
 
 <div class='tabbed-code-blocks'>
 ```Request
@@ -31,12 +31,12 @@ curl --location --request POST 'https://api-eu1.tatum.io/v3/blockchain/sc/custod
 ```
 </div>
 
-The response gives us a hash of the transaction. We can [obtain the contract address](https://developer.tatum.io/rest/smart-contracts/get-contract-address-from-transaction) - our gas pump address - from this hash.
+The response gives us a hash of the transaction. We can [obtain the contract address](https://docs.tatum.io/rest/smart-contracts/get-contract-address-from-transaction) - our gas pump address - from this hash.
 
 ---
 ## Virtual account creation
 
-Now we need to [create virtual accounts](https://developer.tatum.io/rest/virtual-accounts/create-new-account). Since we have decided to support two currencies, MATIC and USDC, we need to create two virtual accounts for every user. These accounts do not have xpubs because we will manually assign the address to them later.
+Now we need to [create virtual accounts](https://docs.tatum.io/rest/virtual-accounts/create-new-account). Since we have decided to support two currencies, MATIC and USDC, we need to create two virtual accounts for every user. These accounts do not have xpubs because we will manually assign the address to them later.
 
 <div class='tabbed-code-blocks'>
 ```Request
@@ -76,7 +76,7 @@ curl --request POST \
 ```
 </div>
 
-Once an account has been created, we need to [assign the gas pump address](https://developer.tatum.io/rest/virtual-accounts/assign-address-for-account) to it. This process enables automatic incoming transaction synchronization for the specified address and currency.
+Once an account has been created, we need to [assign the gas pump address](https://docs.tatum.io/rest/virtual-accounts/assign-address-for-account) to it. This process enables automatic incoming transaction synchronization for the specified address and currency.
 
 <div class='tabbed-code-blocks'>
 ```Request
@@ -113,7 +113,7 @@ Let's withdraw 1 USDC from an account to the blockchain.
 
 #### Perform a withdrawal
 
-First you need to send a [request for withdrawal](https://developer.tatum.io/rest/virtual-accounts/store-withdrawal) from the virtual account so that, after performing the blockchain operation, the virtual account would be synchronized.
+First you need to send a [request for withdrawal](https://docs.tatum.io/rest/virtual-accounts/store-withdrawal) from the virtual account so that, after performing the blockchain operation, the virtual account would be synchronized.
 
 <div class='tabbed-code-blocks'>
 ```Request
@@ -164,7 +164,7 @@ The response contains a virtual account transaction `reference` and a withdrawal
 
 #### Perform a blockchain transaction
 
-Now it's time to [move the assets to another address](https://developer.tatum.io/rest/smart-contracts/transfer-assets-from-custodial-wallet). Since we're using gas pump wallets, you don't have to send any MATIC there to pay for gas. You only need to specify which assets should be sent, how much of them, and where to send them, and the funds required to pay for the transaction will automatically be deducted from the owner address you specified when creating the gas pump wallets.
+Now it's time to [move the assets to another address](https://docs.tatum.io/rest/smart-contracts/transfer-assets-from-custodial-wallet). Since we're using gas pump wallets, you don't have to send any MATIC there to pay for gas. You only need to specify which assets should be sent, how much of them, and where to send them, and the funds required to pay for the transaction will automatically be deducted from the owner address you specified when creating the gas pump wallets.
 
 <div class='tabbed-code-blocks'>
 ```Request
@@ -193,6 +193,6 @@ The response is the transaction hash. As you can see, we have to enter the addre
 
 #### Complete or cancel the withdrawal
 
-Once the transaction is successful, you need to [mark the withdrawal as completed](https://developer.tatum.io/rest/virtual-accounts/complete-withdrawal). If the transaction fails and you want to refund the assets to the virtual account, you need to [cancel the original withdrawal request](https://developer.tatum.io/rest/virtual-accounts/cancel-withdrawal).
+Once the transaction is successful, you need to [mark the withdrawal as completed](https://docs.tatum.io/rest/virtual-accounts/complete-withdrawal). If the transaction fails and you want to refund the assets to the virtual account, you need to [cancel the original withdrawal request](https://docs.tatum.io/rest/virtual-accounts/cancel-withdrawal).
 
 That's it. 5 simple steps to connect your gas pump wallets to virtual accounts and keep them synced.
