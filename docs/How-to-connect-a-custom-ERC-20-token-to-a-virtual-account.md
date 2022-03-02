@@ -28,7 +28,7 @@ If you want to support an existing ERC-20 token, you only need to [create a virt
 <div class='tabbed-code-blocks'>
 ```Request
 curl --request POST \
-  --url https://api-eu1.tatum.io/v4/token/ETH/erc20/deploy \
+  --url https://api-eu1.tatum.io/v3/offchain/ethereum/erc20 \
   --header 'Content-Type: application/json' \
   --header 'x-api-key: ' \
   --header 'x-testnet-type: ' \
