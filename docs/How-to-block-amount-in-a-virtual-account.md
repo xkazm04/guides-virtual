@@ -18,7 +18,7 @@ Blockages affect the available balance of the account. Every new blockage has it
 
 ## Blocking funds in a virtual account
 
-[To block funds in an account](https://developer.tatum.io/rest/virtual-accounts/block-an-amount-in-an-account), the account ID, amount, and type are required parameters. 
+[To block funds in an account](https://docs.tatum.io/rest/virtual-accounts/block-an-amount-in-an-account), the account ID, amount, and type are required parameters. 
 
 
 <div class='tabbed-code-blocks'>
@@ -61,7 +61,7 @@ The response is the identifier of the blockage.
 
 ## Getting an account's details
 
-You can now [get details about the account](https://developer.tatum.io/rest/virtual-accounts/get-account-by-id) where we made the blockage to see what has happened with the balance.
+You can now [get details about the account](https://docs.tatum.io/rest/virtual-accounts/get-account-by-id) where we made the blockage to see what has happened with the balance.
 
 <div class='tabbed-code-blocks'>
 ```SDK
@@ -104,7 +104,7 @@ The response will contain the details of the virtual account associated with the
 
 ## Getting all blockages in the account
 
-As you can see, there were 5 bitcoins blocked in the account, so the available balance is negative. Now you can [get all blockages in the specific account](https://developer.tatum.io/rest/virtual-accounts/get-blocked-amounts-in-an-account).
+As you can see, there were 5 bitcoins blocked in the account, so the available balance is negative. Now you can [get all blockages in the specific account](https://docs.tatum.io/rest/virtual-accounts/get-blocked-amounts-in-an-account).
 
 
 <div class='tabbed-code-blocks'>
@@ -115,7 +115,7 @@ import { getBlockedAmountsByAccountId  } from '@tatumio/tatum';
  * @param id - account ID
  * @param pageSize - max number of items per page is 50
  * @param offset - optional Offset to obtain next page of the data
- * @returns - detail of blocked amounts - https://tatum.io/apidoc.php#operation/getBlockAmount
+ * @returns - detail of blocked amounts
 */
 const amounts = getBlockedAmountsByAccountId("5fbaca3001421166273b3779?pageSize=50");
 ```
@@ -150,7 +150,7 @@ When you want to unblock an amount from the account, you have several options:
 
 ## Unblocking an amount in the account
 
-Let's [unblock a blockage without a transaction](https://developer.tatum.io/rest/virtual-accounts/unblock-a-blocked-amount-in-an-account). You'll need to pass the ID of the specific blockage you want to unblock.
+Let's [unblock a blockage without a transaction](https://docs.tatum.io/rest/virtual-accounts/unblock-a-blocked-amount-in-an-account). You'll need to pass the ID of the specific blockage you want to unblock.
 
 <div class='tabbed-code-blocks'>
 ```SDK
@@ -175,7 +175,7 @@ There will be an empty response if the request is successful. Now, when you chec
 import {getAccountById} from '@tatumio/tatum';
 /**
  * Gets active account by ID.
- * Displays all information regarding the given account - https://tatum.io/apidoc.php#operation/getAccountByAccountId
+ * Displays all information regarding the given account 
  * @param id - ledger account ID
  */
 const account = getAccountById("5fbaca3001421166273b3779");
@@ -202,7 +202,7 @@ curl --location --request GET 'https://api-eu1.tatum.io/v3/ledger/account/5fbaca
 ```
 </div>
 
-You can test other unblocking methods or read more about the specific endpoints in the [API Reference](https://developer.tatum.io/rest/virtual-accounts/ block-an-amount-in-an-account). 
+You can test other unblocking methods or read more about the specific endpoints in the [API Reference](https://docs.tatum.io/rest/virtual-accounts/block-an-amount-in-an-account). 
 
 
 
