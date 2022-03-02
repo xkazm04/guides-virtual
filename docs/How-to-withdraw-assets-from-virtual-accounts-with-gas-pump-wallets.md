@@ -41,7 +41,7 @@ Now we need to [create virtual accounts](https://docs.tatum.io/rest/virtual-acco
 <div class='tabbed-code-blocks'>
 ```Request
 curl --request POST \
-  --url https://api-eu1.tatum.io/v4/tatum/account \
+  --url https://api-eu1.tatum.io/v3/ledger/account \
   --header 'Content-Type: application/json' \
   --header 'x-api-key: ' \
   --data '{
@@ -81,7 +81,7 @@ Once an account has been created, we need to [assign the gas pump address](https
 <div class='tabbed-code-blocks'>
 ```Request
 curl --request POST \
-  --url https://api-eu1.tatum.io/v4/tatum/account/id/address/address \
+  --url https://api-eu1.tatum.io/v3/offchain/account/{id}/address/{address} \
   --header 'Content-Type: application/json' \
   --header 'x-api-key: '
 ```
@@ -118,7 +118,7 @@ First you need to send a [request for withdrawal](https://docs.tatum.io/rest/vir
 <div class='tabbed-code-blocks'>
 ```Request
 curl --request POST \
-  --url https://api-eu1.tatum.io/v4/tatum/withdrawal \
+  --url https://api-eu1.tatum.io/v3/offchain/withdrawal \
   --header 'Content-Type: application/json' \
   --header 'x-api-key: ' \
   --data '{

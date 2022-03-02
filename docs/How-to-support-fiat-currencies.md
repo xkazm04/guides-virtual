@@ -32,7 +32,6 @@ import {Currency, Fiat, createVirtualCurrency } from '@tatumio/tatum';
 /**
  * Create new virtual currency with given supply stored in account.
  * This will create Tatum internal virtual currency.
- * @param data - body of request - https://tatum.io/apidoc.php#operation/createCurrency
  * @returns virtual currency detail
  */
 const body = {
@@ -44,7 +43,7 @@ const vc = createVirtualCurrency (body);
 ```
 ```REST API call
 curl --request POST \
-  --url https://api-eu1.tatum.io/v4/tatum/token \
+  --url https://docs.tatum.io/rest/virtual-accounts/create-new-virtual-currency \
   --header 'Content-Type: application/json' \
   --header 'x-api-key: ' \
   --data '{
@@ -95,7 +94,7 @@ When you want to [increase the supply of a virtual currency](https://docs.tatum.
 import { mintVirtualCurrency } from '@tatumio/tatum';
 /**
  * Create new supply of virtual currency linked on the given accountId.
- * @param data - body of request - https://tatum.io/apidoc.php#operation/mintCurrency
+ * @param data - body of request - https://docs.tatum.io/rest/virtual-accounts/create-new-supply-of-virtual-currency
  * @returns transaction internal reference
  */
 const body = {
@@ -106,7 +105,7 @@ const mint = mintVirtualCurrency (body);
 ```
 ```REST API call
 curl --request PUT \
-  --url https://api-eu1.tatum.io/v4/vc/token/mint \
+  --url https://api-eu1.tatum.io/v3/ledger/virtualCurrency/mint \
   --header 'Content-Type: application/json' \
   --header 'x-api-key: ' \
   --data '{
@@ -144,7 +143,7 @@ When you want to [decrease the supply of a virtual currency](https://docs.tatum.
 import { revokeVirtualCurrency } from '@tatumio/tatum';
 /**
  * Destroy supply of virtual currency linked on the given accountId.
- * @param data - body of request - https://tatum.io/apidoc.php#operation/revokeCurrency
+ * @param data - body of request - 
  * @returns transaction internal reference
  */
 const body = {
@@ -155,7 +154,7 @@ const burn = revokeVirtualCurrency (body);
 ```
 ```REST API call
 curl --request PUT \
-  --url https://api-eu1.tatum.io/v4/vc/token/revoke \
+  --url https://api-eu1.tatum.io/v3/ledger/virtualCurrency/revoke \
   --header 'Content-Type: application/json' \
   --header 'x-api-key: ' \
   --data '{
@@ -189,7 +188,7 @@ When we get the [list of account transactions](https://docs.tatum.io/rest/virtua
 import {getTransactionsByAccount} from '@tatumio/tatum';
 /**
  * Finds transactions for the account identified by the given account ID.
- * @param filter - request body with data filter - https://tatum.io/apidoc.php#operation/getTransactionsByAccountId
+ * @param filter - request body with data filter - https://docs.tatum.io/rest/virtual-accounts/find-transactions-for-account
  * @param pageSize - max number of items per page is 50.
  * @param offset - optional Offset to obtain next page of the data.
  */
@@ -200,7 +199,7 @@ const tx = getTransactionsByAccount(filter,50,0);
 ```
 ```REST API call
 curl --request POST \
-  --url https://api-eu1.tatum.io/v4/tatum/transaction/account \
+  --url https://api-eu1.tatum.io/v3/ledger/transaction/account \
   --header 'Content-Type: application/json' \
   --header 'x-api-key: ' \
   --data '{
